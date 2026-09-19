@@ -1,0 +1,10 @@
+{
+  "profiles": {
+    "Godot Game": {
+      "commandName": "Executable",
+      "executablePath": "C:\\Users\\JoeyTemp\\Desktop\\Godot_v4.7.2-stable_mono_win64\\Godot_v4.7.2-stable_mono_win64.exe",
+      "commandLineArgs": "--path \"C:\\Users\\JoeyTemp\\Desktop\\Game Development\\Blob-eat-blob\"",
+      "workingDirectory": "C:\\Users\\JoeyTemp\\Desktop\\Game Development\\Blob-eat-blob"
+    }
+  }
+}

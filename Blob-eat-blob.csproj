@@ -6,6 +6,9 @@
     <RootNamespace>Blobeatblob</RootNamespace>
   </PropertyGroup>
   <ItemGroup>
+    <Content Include="Properties\launchSettings.json" />
+  </ItemGroup>
+  <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
   </ItemGroup>
 </Project>
