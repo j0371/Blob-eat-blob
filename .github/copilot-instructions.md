@@ -1,0 +1,4 @@
+# Copilot Instructions
+
+## Project Guidelines
+- When checking repository-specific agent policy, treat AGENTS.md as a relevant instruction file and inspect it when the user indicates it is present or current.
