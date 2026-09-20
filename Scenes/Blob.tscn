@@ -4,15 +4,22 @@
 [ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_rq8tt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
+radius = 2.009975
 
 [node name="Blob" type="CharacterBody2D" unique_id=1008369897]
 motion_mode = 1
 script = ExtResource("1_jp85t")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=391567650]
+[node name="PhysicalCollision" type="CollisionShape2D" parent="." unique_id=391567650]
 shape = SubResource("CircleShape2D_dewec")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2031984160]
 position = Vector2(-8.940697e-07, -9.536743e-07)
 scale = Vector2(0.018, 0.018)
 texture = ExtResource("2_rq8tt")
+
+[node name="EnemyDetection" type="Area2D" parent="." unique_id=1099444505]
+scale = Vector2(5, 5)
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="EnemyDetection" unique_id=193483932]
+shape = SubResource("CircleShape2D_dewec")

@@ -6,4 +6,4 @@
 [node name="Player" unique_id=1008369897 instance=ExtResource("1_rpqav")]
 script = ExtResource("1_kyqiw")
 
-[node name="Camera2D" type="Camera2D" parent="." index="2" unique_id=212387332]
+[node name="Camera2D" type="Camera2D" parent="." index="3" unique_id=212387332]
