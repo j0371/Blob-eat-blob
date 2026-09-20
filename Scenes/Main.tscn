@@ -1,12 +1,16 @@
 [gd_scene format=3 uid="uid://cftg6nq4k4aed"]
 
+[ext_resource type="Script" uid="uid://ehd0nievwsm2" path="res://Scripts/Main.cs" id="1_kln2b"]
 [ext_resource type="PackedScene" uid="uid://cikxtn6t3d56h" path="res://Scenes/Player.tscn" id="2_idj7w"]
+[ext_resource type="PackedScene" uid="uid://cacrd8pi1yh8s" path="res://Scenes/Enemy.tscn" id="2_rgh2o"]
 [ext_resource type="Texture2D" uid="uid://ck07qv253nd40" path="res://Assets/Placeholders/BackgroundPlaceholder.png" id="3_kln2b"]
 
 [node name="Main" type="Node2D" unique_id=1087271970]
+script = ExtResource("1_kln2b")
+EnemyScene = ExtResource("2_rgh2o")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1239749945]
 z_index = -1
 texture = ExtResource("3_kln2b")
 
-[node name="Player" parent="." unique_id=540192476 instance=ExtResource("2_idj7w")]
+[node name="Player" parent="." unique_id=1008369897 instance=ExtResource("2_idj7w")]

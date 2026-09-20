@@ -1,0 +1,18 @@
+[gd_scene format=3 uid="uid://dwtcl205x3r0h"]
+
+[ext_resource type="Script" uid="uid://cirgnboxfpbw2" path="res://Scripts/Blob.cs" id="1_jp85t"]
+[ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_rq8tt"]
+
+[sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
+
+[node name="Blob" type="CharacterBody2D" unique_id=1008369897]
+motion_mode = 1
+script = ExtResource("1_jp85t")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=391567650]
+shape = SubResource("CircleShape2D_dewec")
+
+[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2031984160]
+position = Vector2(-8.940697e-07, -9.536743e-07)
+scale = Vector2(0.018, 0.018)
+texture = ExtResource("2_rq8tt")

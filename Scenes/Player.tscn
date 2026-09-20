@@ -1,20 +1,9 @@
 [gd_scene format=3 uid="uid://cikxtn6t3d56h"]
 
 [ext_resource type="Script" uid="uid://bbft6rppw75xb" path="res://Scripts/Player.cs" id="1_kyqiw"]
-[ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_gntrk"]
+[ext_resource type="PackedScene" uid="uid://dwtcl205x3r0h" path="res://Scenes/Blob.tscn" id="1_rpqav"]
 
-[sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
-
-[node name="Player" type="CharacterBody2D" unique_id=1008369897]
-motion_mode = 1
+[node name="Player" unique_id=1008369897 instance=ExtResource("1_rpqav")]
 script = ExtResource("1_kyqiw")
 
-[node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=391567650]
-shape = SubResource("CircleShape2D_dewec")
-
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=2031984160]
-position = Vector2(-8.940697e-07, -9.536743e-07)
-scale = Vector2(0.018, 0.018)
-texture = ExtResource("2_gntrk")
-
-[node name="Camera2D" type="Camera2D" parent="." unique_id=542414291]
+[node name="Camera2D" type="Camera2D" parent="." index="2" unique_id=212387332]
