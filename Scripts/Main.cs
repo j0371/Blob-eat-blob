@@ -4,10 +4,10 @@ using System;
 public partial class Main : Node2D
 {
     [Export]
-    public PackedScene EnemyScene { get; set; }
+    public PackedScene NonPlayerScene { get; set; }
 
     [Export]
-    public int EnemyCount { get; set; } = 10;
+    public int NonPlayerCount { get; set; } = 10;
 
     [Export]
     public Rect2 SpawnArea { get; set; } =
@@ -18,27 +18,27 @@ public partial class Main : Node2D
     public override void _Ready()
     {
         _random.Randomize();
-        SpawnEnemies();
+        SpawnNonPlayers();
     }
 
-    private void SpawnEnemies()
+    private void SpawnNonPlayers()
     {
-        if (EnemyScene == null)
+        if (NonPlayerScene is null)
         {
-            GD.PushError("EnemyScene has not been assigned.");
+            GD.PushError("NonPlayerScene has not been instantiated.");
             return;
         }
 
-        for (int i = 0; i < EnemyCount; i++)
+        for (int i = 0; i < NonPlayerCount; i++)
         {
-            Node2D enemy = EnemyScene.Instantiate<Node2D>();
+            Node2D nonPlayer = NonPlayerScene.Instantiate<Node2D>();
 
             Vector2 position = new(
                 _random.RandfRange(SpawnArea.Position.X, SpawnArea.End.X),
                 _random.RandfRange(SpawnArea.Position.Y, SpawnArea.End.Y));
 
-            enemy.Position = position;
-            AddChild(enemy);
+            nonPlayer.Position = position;
+            AddChild(nonPlayer);
         }
     }
 }

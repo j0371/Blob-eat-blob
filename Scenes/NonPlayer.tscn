@@ -1,9 +1,11 @@
 [gd_scene format=3 uid="uid://cacrd8pi1yh8s"]
 
 [ext_resource type="PackedScene" uid="uid://dwtcl205x3r0h" path="res://Scenes/Blob.tscn" id="1_wovta"]
+[ext_resource type="Script" uid="uid://buj15tphimlfm" path="res://Scripts/NonPlayer.cs" id="2_53hbd"]
 [ext_resource type="Texture2D" uid="uid://dcve6xsvknsqv" path="res://Assets/AI Generated/GreenCircle.png" id="2_xeo28"]
 
-[node name="Enemy" unique_id=1008369897 instance=ExtResource("1_wovta")]
+[node name="NonPlayer" unique_id=1008369897 instance=ExtResource("1_wovta")]
+script = ExtResource("2_53hbd")
 
 [node name="Sprite2D" parent="." index="1" unique_id=2031984160]
 texture = ExtResource("2_xeo28")
