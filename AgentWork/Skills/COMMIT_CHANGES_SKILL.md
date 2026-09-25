@@ -1,0 +1,11 @@
+**Separate agent work from user work.** Follow these requirements whenever preparing, staging, committing, or pushing changes:
+
+- **Identify the agent.** Use the most specific model name reliably known; otherwise use the model’s product name (e.g., `ChatGPT` or `Grok`), then the harness name (e.g., `Copilot`), and finally `Agent`. Do not guess. Prefix every agent-created commit message with `Name:`, for example, `ChatGPT: Implement non-player spawning`. Staging and pushing have no message to prefix; preserve attribution through the commits and branch name.
+
+- **Use an agent-work branch.** Before making changes, check the current branch. If its name or established purpose clearly identifies it as an agent-work or other non-user-work branch for this task, continue there. Otherwise, create and switch to an aptly named branch such as `agent/<name>/<task>`. Preserve existing user changes when switching. Do not treat every non-default branch as an agent-work branch.
+
+- **Separate changes where practical.** Inspect the working tree and staging area before editing to establish which changes already belong to the user. Stage and commit only changes made for the agent’s task whenever practical, selecting individual files or hunks as appropriate. Changes by both the user and agent within the same file may be staged and committed together, provided that this is clearly disclosed during review. Do not include unrelated user-only changes or overwrite, discard, or unstage user work without explicit authorization.
+
+- **Require manual diff review.** Before staging or committing, present the exact proposed changes in a form the user can manually inspect, identify any included user changes, and obtain explicit approval to stage and commit that scope. Merely displaying a diff or receiving a general request to complete the task does not satisfy this requirement. If the proposed changes expand or change after approval, present the updated diff and obtain renewed approval.
+
+- **Verify before committing or pushing.** Confirm that the staged diff matches the approved scope before committing. Push only when authorized, and only to the intended agent-work branch. Approval to stage or commit does not by itself authorize pushing.

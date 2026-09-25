@@ -1,27 +1,32 @@
 
+using BlobEatBlob.Enums;
 using Godot;
-using System;
 
 namespace BlobEatBlob.Scripts;
 
-public partial class Player : CharacterBody2D
+public partial class Player : Blob
 {
-    public const float Speed = 300.0f;
 
     public override void _PhysicsProcess(double delta)
     {
-        Vector2 direction = Vector2.Zero;
 
-        if (Input.IsActionPressed("up"))
-            direction += Vector2.Up;
-        else if (Input.IsActionPressed("down"))
-            direction += Vector2.Down;
-        else if (Input.IsActionPressed("left"))
-            direction += Vector2.Left;
-        else if (Input.IsActionPressed("right"))
-            direction += Vector2.Right;
+        base._PhysicsProcess(delta);
+
+        Move();
+
+    }
+
+    private Vector2 Move()
+    {
+        Vector2 direction = Input.GetVector(
+            Direction.Left.Input(),
+            Direction.Right.Input(),
+            Direction.Up.Input(),
+            Direction.Down.Input());
 
         Velocity = direction * Speed;
         MoveAndSlide();
+
+        return Velocity;
     }
 }

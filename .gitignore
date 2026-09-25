@@ -3,3 +3,5 @@
 /AgentWork/.venv/
 /AgentWork/Workflows/
 /.vs/
+
+Properties/launchSettings.json
