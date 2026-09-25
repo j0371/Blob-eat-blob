@@ -2,34 +2,40 @@ using BlobEatBlob.Enums;
 using Godot;
 using System;
 using System.Collections.Generic;
+using System.Linq;
 
 namespace BlobEatBlob.Scripts;
 
 public partial class NonPlayerSpawner : Node2D
 {
 
-    private const List<Direction> _directions = { Direction.Up, Direction.Down, Direction.Left, Direction.Right };
-
     [Export]
     private CollisionShape2D _activeBounds;
+
+    [Export]
+    private CollisionShape2D _spawnArea;
 
     private readonly PackedScene _nonPlayerScene;
 
     private readonly RandomNumberGenerator _random = new();
 
+    
+
     private readonly int _maxNonPlayerCount = 10;
 
-    private readonly int _nonPlayerCount = 0;
+    private int _nonPlayerCount = 0;
 
     // Called when the node enters the scene tree for the first time.
     public override void _Ready()
 	{
+        var directions = Enum.GetValues<Direction>().ToList();
+
         var ActiveBoundsrectangle = (RectangleShape2D) _activeBounds.Shape;
 
         Vector2 size = ActiveBoundsrectangle.Size;
         Vector2 center = _activeBounds.GlobalPosition;
 
-        var directions = Enum.GetValues<Direction>();
+        _spawnArea = new CollisionShape2D();
 
     }
     
