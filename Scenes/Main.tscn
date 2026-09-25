@@ -11,6 +11,7 @@ NonPlayerScene = ExtResource("2_rgh2o")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1239749945]
 z_index = -1
+position = Vector2(-3, 26)
 texture = ExtResource("3_kln2b")
 
 [node name="Player" parent="." unique_id=1008369897 instance=ExtResource("2_idj7w")]
