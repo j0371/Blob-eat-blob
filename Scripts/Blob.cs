@@ -27,7 +27,7 @@ public partial class Blob : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
 	{
-
+        
     }
 
     private void OnEnemyTouched(Node2D body)

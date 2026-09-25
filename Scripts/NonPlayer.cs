@@ -25,8 +25,10 @@ public partial class NonPlayer : Blob
 
     public override void _PhysicsProcess(double delta)
 	{
-		
-	}
+        base._PhysicsProcess(delta);
+
+        Move();
+    }
 
     private Vector2 Move()
     {

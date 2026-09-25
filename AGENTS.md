@@ -59,12 +59,12 @@ This policy applies to all agents working in this repository
     before saying the task is complete. Distinguish changes made from checks
     actually performed, and disclose any remaining failure or unverified step.
     Never invent test results, sandbox status, commits, or submission evidence.
-
-11. **Review policies at the start of all workflows.** Before performing any
-   agentic work, review this AGENTS.md file in full and review all policy
-   files in the AgentPolicies/ directory. Treat all supplemental policy files as
+  
+11. **Review all policies.** Before performing any
+   agentic work,  make sure that you have reviewed all policy and skill
+   files in the AgentWork/Policies/ directory. Treat all supplemental policy files as
    extensions of this policy and identify which requirements apply to the
    current workflow before taking further action. If multiple policies apply,
    follow all of them unless they conflict; if a conflict exists, stop and
    report it to the user rather than choosing one silently. Review all
-   supplemental policies once you are done reviewing this one right now
+   supplemental policies and skills once you are done reviewing this one right now

@@ -3,7 +3,15 @@
 [ext_resource type="Script" uid="uid://bbft6rppw75xb" path="res://Scripts/Player.cs" id="1_kyqiw"]
 [ext_resource type="PackedScene" uid="uid://dwtcl205x3r0h" path="res://Scenes/Blob.tscn" id="1_rpqav"]
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_dx8hr"]
+size = Vector2(2000, 2000)
+
 [node name="Player" unique_id=1008369897 instance=ExtResource("1_rpqav")]
 script = ExtResource("1_kyqiw")
 
 [node name="Camera2D" type="Camera2D" parent="." index="3" unique_id=212387332]
+
+[node name="NonPlayerActiveBounds" type="Area2D" parent="." index="4" unique_id=1078959630]
+
+[node name="BoundsRectangle" type="CollisionShape2D" parent="NonPlayerActiveBounds" index="0" unique_id=1931180464]
+shape = SubResource("RectangleShape2D_dx8hr")
