@@ -10,5 +10,6 @@
   </ItemGroup>
   <ItemGroup>
     <None Include=".github\copilot-instructions.md" />
+    <None Include="Workflows\conversation-transcript-nonplayerspawner-session.md" />
   </ItemGroup>
 </Project>
