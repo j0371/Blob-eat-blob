@@ -2,44 +2,23 @@
 
 This policy applies to all agents working in this repository
 
-### Docker-container exceptions
-========================================================================================================================
-Rules marked **`<DC>`** are conditionally applicable. This exception is active **only when the user explicitly states that the agent is in a “docker container”**. The surrounding wording may vary, but the user's instruction must contain the words **“docker container”** and must clearly assert that the agent is operating within one. Do not infer containerization from the environment, repository configuration, Dockerfiles, prior workflows, prior context, other contextual evidence, or the agent's own observations.
-
-When the condition is satisfied, only rules marked **`<DC>`** are exempt. **Every unmarked rule in this `AGENTS.md` remains fully applicable and must be followed.**
-
-If the user has not explicitly stated that the agent is in a **“docker container”**, **all rules apply, including rules marked `<DC>`.**
-========================================================================================================================
-
 ------------------------------------------------------------------------------------------------------------------------
-1. `<DC>` **Stay inside this repository.** Start from the repository root and limit
+1. **Stay inside this repository.** Start from the repository root and limit
    file access, commands, and changes to this repository. Do not access unrelated
    host locations or follow links that lead outside the repository. Do not
    broaden filesystem permissions or sandbox grants to bypass this boundary.
-------------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------------
-2. **Protect secrets and private data.** Never read, print, store, commit, or
-   upload secrets, credentials, access tokens, private keys, browser data, or
-   configuration files that may contain them. Do not inspect credential stores,
-   browser profiles, or secret-bearing environment files. If sensitive data
-   appears unexpectedly, stop the affected action and notify the user without
-   repeating the data. Leave any authentication steps that require
-   credentials, secrets, private data, or any other sensitive data to the user.
+   If you find that you need to make a change outside of the repository,
+   do not prompt any command before you have clearly explained to the user
+   what the change is, why it is absolutely necessary for you to make it,
+   in order to complete the requested work, and only do the absolute
+   minimum amount of work and changes outside of the repo that 
+   is necessary.
 ------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------------------
 3.  **Explain changes before editing.** Describe the intended change, the files
    it affects, and how the result will be checked. Keep the work within the
    user's requested scope; explain any necessary change of plan before acting.
-------------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------------
-4. `<DC>` **Ask before restricted actions.** Obtain explicit user approval before
-   installing software or dependencies, accessing a new network destination,
-   deleting files, changing Git history, committing, or pushing. Explain the
-   exact action, its purpose, and its target before requesting approval. An
-   existing approval covers only the action and scope the user authorized.
 ------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------------------
@@ -81,12 +60,6 @@ If the user has not explicitly stated that the agent is in a **“docker contain
 ------------------------------------------------------------------------------------------------------------------------
 
 ------------------------------------------------------------------------------------------------------------------------
-6. `<DC>` **Keep changes small and reviewable.** Edit only the files needed for the
-   current task. Avoid unrelated refactoring, formatting, generated files, and
-   dependency changes.
-------------------------------------------------------------------------------------------------------------------------
-
-------------------------------------------------------------------------------------------------------------------------
 7. **Review and validate changes.** After editing, inspect `git diff` and check
    `git status` to verify that the resulting changes are correct, complete, and
    limited to the intended scope. Inspect new untracked files separately,
@@ -112,7 +85,8 @@ If the user has not explicitly stated that the agent is in a **“docker contain
 
 ------------------------------------------------------------------------------------------------------------------------
 10. **Review all policies.** Before performing any
-   agentic work,  make sure that you have reviewed all policy and skill
+   agentic work,  make sure that you have reviewed and understand this `AGENTS.md`
+   policy file, and all policy and skill
    files in the `/AgentWork/Policies/` and `/AgentWork/Skills/` directory. Treat all supplemental policy files as
    extensions of this policy and identify which requirements apply to the
    current workflow before taking further action. If multiple policies apply,
