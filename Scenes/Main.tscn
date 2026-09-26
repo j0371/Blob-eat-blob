@@ -4,6 +4,7 @@
 [ext_resource type="PackedScene" uid="uid://cikxtn6t3d56h" path="res://Scenes/Player.tscn" id="2_idj7w"]
 [ext_resource type="Texture2D" uid="uid://ck07qv253nd40" path="res://Assets/Placeholders/BackgroundPlaceholder.png" id="3_kln2b"]
 [ext_resource type="Script" uid="uid://wlh0i1pwejex" path="res://Scripts/NonPlayerSpawner.cs" id="5_pbw6q"]
+[ext_resource type="PackedScene" uid="uid://cacrd8pi1yh8s" path="res://Scenes/NonPlayer.tscn" id="6_npscn"]
 
 [node name="Main" type="Node2D" unique_id=1087271970]
 script = ExtResource("1_kln2b")
@@ -15,8 +16,10 @@ texture = ExtResource("3_kln2b")
 
 [node name="Player" parent="." unique_id=1008369897 instance=ExtResource("2_idj7w")]
 
-[node name="NonPlayerSpawner" type="Node2D" parent="." unique_id=756965952 node_paths=PackedStringArray("_ActiveBounds")]
+[node name="NonPlayerSpawner" type="Node2D" parent="." unique_id=756965952 node_paths=PackedStringArray("_activeBounds", "_player")]
 script = ExtResource("5_pbw6q")
-_ActiveBounds = NodePath("../Player/NonPlayerActiveBounds/BoundsRectangle")
+_activeBounds = NodePath("../Player/NonPlayerActiveBounds/BoundsRectangle")
+_nonPlayerScene = ExtResource("6_npscn")
+_player = NodePath("../Player")
 
 [editable path="Player"]

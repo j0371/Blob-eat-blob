@@ -9,11 +9,17 @@ public partial class Blob : CharacterBody2D
 {
     private Area2D _detectionArea;
 
+    private CollisionShape2D _detectionShape;
+
     private Vector2 _baseScale;
 
     public int Size { get; private set; } = 1;
 
     public float Speed { get; private set; } = 300.0f;
+
+    // World-space radius of the area this blob can eat within.
+    public float DetectionRadius =>
+        ((CircleShape2D)_detectionShape.Shape).Radius * _detectionShape.GlobalScale.X;
 
     public override void _Ready()
     {
@@ -21,6 +27,7 @@ public partial class Blob : CharacterBody2D
 
         _detectionArea = GetNode<Area2D>("EnemyDetection"); //TODO: Enum?
         _detectionArea.BodyEntered += OnEnemyTouched;
+        _detectionShape = _detectionArea.GetNode<CollisionShape2D>("DetectionRectangle");
 
         Grow(BlobGrowAmount.Small.Size());
     }
