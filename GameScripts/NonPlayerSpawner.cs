@@ -14,9 +14,10 @@ public partial class NonPlayerSpawner : Node2D
     [Export]
     private CollisionShape2D _activeBounds;
 
-    private readonly PackedScene _nonPlayerScene;
+    [Export]
+    private PackedScene _nonPlayerScene;
 
-    private bool IsReady => !(this.DisableIfMissing(_nonPlayerScene) | this.DisableIfMissing(_activeBounds));
+    protected bool IsReady => !(this.DisableIfMissing(_nonPlayerScene) | this.DisableIfMissing(_activeBounds));
 
 
 
@@ -31,6 +32,8 @@ public partial class NonPlayerSpawner : Node2D
     //Other Properties
     private readonly RandomNumberGenerator _random = new();
 
+
+    //Methods
     public override void _Ready()
     {
         if (!IsReady) return;

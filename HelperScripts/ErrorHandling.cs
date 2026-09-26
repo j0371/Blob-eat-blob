@@ -17,6 +17,7 @@ namespace BlobEatBlob.HelperScripts;
             if (value is not null) return false;
             GD.PushError($"{name} is not assigned.");
             node.SetProcess(false);
+            node.SetPhysicsProcess(false);
             return true;
         }
     }

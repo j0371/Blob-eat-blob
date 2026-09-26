@@ -8,10 +8,22 @@ namespace BlobEatBlob.Scripts;
 
 public partial class NonPlayer : Blob
 {
+    //Necessary Godot Game Properties
+    protected new bool IsReady => base.IsReady;
+
+
+    //Node Properties
     private Direction _moveDirection;
 
+
+    //Other Properties
+
+
+    //Methods
     public override void _Ready()
     {
+        if (!IsReady) return;
+
         base._Ready();
 
         RandomNumberGenerator randomGrow = new();

@@ -6,7 +6,16 @@ namespace BlobEatBlob.Scripts;
 
 public partial class Player : Blob
 {
+    //Necessary Godot Game Properties
+    protected new bool IsReady => base.IsReady;
 
+    //Node Properties
+
+
+    //Other Properties
+
+
+    //Methods
     public override void _PhysicsProcess(double delta)
     {
 
