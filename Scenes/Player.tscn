@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://cikxtn6t3d56h"]
 
-[ext_resource type="Script" uid="uid://bbft6rppw75xb" path="res://Scripts/Player.cs" id="1_kyqiw"]
+[ext_resource type="Script" uid="uid://bbft6rppw75xb" path="res://GameScripts/Player.cs" id="1_kyqiw"]
 [ext_resource type="PackedScene" uid="uid://dwtcl205x3r0h" path="res://Scenes/Blob.tscn" id="1_rpqav"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dx8hr"]

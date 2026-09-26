@@ -1,6 +1,6 @@
 [gd_scene format=3 uid="uid://dwtcl205x3r0h"]
 
-[ext_resource type="Script" uid="uid://cirgnboxfpbw2" path="res://Scripts/Blob.cs" id="1_jp85t"]
+[ext_resource type="Script" uid="uid://cirgnboxfpbw2" path="res://GameScripts/Blob.cs" id="1_jp85t"]
 [ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_rq8tt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
