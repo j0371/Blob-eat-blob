@@ -21,8 +21,6 @@ public partial class Blob : CharacterBody2D
 
         _detectionArea = GetNode<Area2D>("EnemyDetection"); //TODO: Enum?
         _detectionArea.BodyEntered += OnEnemyTouched;
-
-        Grow(BlobGrowAmount.Small.Size());
     }
 
     public override void _PhysicsProcess(double delta)
