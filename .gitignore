@@ -3,5 +3,6 @@
 /AgentWork/.venv/
 /AgentWork/Workflows/
 /.vs/
+/Godot_v4.7.2-stable_mono_win64/
 
 Properties/launchSettings.json
