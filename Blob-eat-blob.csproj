@@ -12,4 +12,7 @@
     <None Include=".github\copilot-instructions.md" />
     <None Include="Workflows\conversation-transcript-nonplayerspawner-session.md" />
   </ItemGroup>
+  <ItemGroup>
+  <Compile Remove="script_templates/**" />
+</ItemGroup>
 </Project>
