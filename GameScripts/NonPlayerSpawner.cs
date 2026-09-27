@@ -24,7 +24,7 @@ public partial class NonPlayerSpawner : Node2D
     private int _maxNonPlayerCount = 10;
 
     [Export(PropertyHint.Range, "-20,20")]
-    private float _marginMultiplier = 1.5f;
+    private float _marginMultiplier = 2f;
 
     public IEnumerable<NonPlayer> SpawnedNonPlayers => GetChildren().OfType<NonPlayer>();
 
@@ -43,24 +43,17 @@ public partial class NonPlayerSpawner : Node2D
     {
         if (SpawnedNonPlayers.Count() >= _maxNonPlayerCount || !IsInstanceValid(_player)) return;
 
-        //creating new non-player blob
-        NonPlayer spawningNonPlayer = _nonPlayerScene.Instantiate<NonPlayer>();
-        spawningNonPlayer.IsPreSpawning = true;
-        AddChild(spawningNonPlayer);
 
         //Getting the outer bounds of the spawn area
         Rect2 spawnAreaOuterBounds = _player.ActiveArea;
 
         //Getting the inner bounds of the spawn area
-        float margin = spawningNonPlayer.Radius * _marginMultiplier;
+        float margin = _player.Radius * _marginMultiplier;
 
         Rect2 spawnAreaInnerBounds = _player.Camera.ViewSquare.Grow(margin);
 
-        if (GeometryError.RectNotEnclosedError(spawnAreaInnerBounds, spawnAreaOuterBounds))
-        {
-            spawningNonPlayer.QueueFree();
-            return;
-        }
+        if (GeometryError.RectNotEnclosedError(spawnAreaInnerBounds, spawnAreaOuterBounds)) return;
+
 
         Rect2[] spawnAreas =
                             [
@@ -70,12 +63,13 @@ public partial class NonPlayerSpawner : Node2D
                                 new(spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Position.Y, spawnAreaOuterBounds.End.X - spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Size.Y),               // right
                             ];
 
+        //creating new non-player blob
+        NonPlayer spawningNonPlayer = _nonPlayerScene.Instantiate<NonPlayer>();
+
         //Placing the blob at a random point within the spawn areas
         spawningNonPlayer.GlobalPosition = GetRandomPointInAreas(spawnAreas);
+        spawningNonPlayer.SetIsPreSpawning(false);
 
-        //Re-adding the blob so it enters physics at its spawn point, not where it was pre-spawned
-        RemoveChild(spawningNonPlayer);
-        spawningNonPlayer.IsPreSpawning = false;
         AddChild(spawningNonPlayer);
     }
 

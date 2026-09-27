@@ -29,7 +29,7 @@ public partial class Blob : CharacterBody2D
     //Methods
     public override void _Ready()
     {
-        if(!IsReady) return;
+        if (!IsReady) return;
 
         _baseScale = Scale;
 
@@ -43,12 +43,17 @@ public partial class Blob : CharacterBody2D
 
     private void OnEnemyTouched(Node2D body)
     {
-        if (body == this || body is not Blob)
+        if (body == this || body is not Blob || body is Player)
         {
             return;
         }
 
-        Blob enemy = body as Blob;
+        NonPlayer enemy = (NonPlayer) body;
+
+        if (enemy.IsPreSpawning)
+        {
+            return;
+        }
 
         if (this.Size < enemy.Size)
         {
@@ -59,7 +64,7 @@ public partial class Blob : CharacterBody2D
         EatEnemy(enemy);
     }
 
-    private void EatEnemy(Blob enemy)
+    protected virtual void EatEnemy(Blob enemy)
     {
         Grow(enemy.Size > this.Size ? BlobGrowAmount.Large.Size() : BlobGrowAmount.Small.Size());
         enemy.QueueFree();
