@@ -6,9 +6,10 @@
 [sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
 radius = 2.009975
 
-[node name="Blob" type="CharacterBody2D" unique_id=1008369897]
+[node name="Blob" type="CharacterBody2D" unique_id=1008369897 node_paths=PackedStringArray("_detectionArea")]
 motion_mode = 1
 script = ExtResource("1_jp85t")
+_detectionArea = NodePath("EnemyDetection")
 
 [node name="PhysicalCollision" type="CollisionShape2D" parent="." unique_id=391567650]
 shape = SubResource("CircleShape2D_dewec")

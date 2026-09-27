@@ -22,11 +22,13 @@ public partial class NonPlayerSpawner : Node2D
 
 
     //Node Properties
+    [Export(PropertyHint.Range, "0,100")]
+    private int _maxNonPlayerCount = 10;
+
+    [Export(PropertyHint.Range, "-20,20")]
+    private float _marginMultiplier = 1.5f;
+
     public IEnumerable<NonPlayer> SpawnedNonPlayers => GetChildren().OfType<NonPlayer>();
-
-    private const int MaxNonPlayerCount = 10;
-
-    private const float MarginMultiplier = 1.5f;
 
 
     //Other Properties
@@ -41,7 +43,7 @@ public partial class NonPlayerSpawner : Node2D
     
 	public override void _Process(double delta)
     {
-        if (SpawnedNonPlayers.Count() >= MaxNonPlayerCount || !IsInstanceValid(_player)) return;
+        if (SpawnedNonPlayers.Count() >= _maxNonPlayerCount || !IsInstanceValid(_player)) return;
 
         //creating new non-player blob
         NonPlayer spawningNonPlayer = _nonPlayerScene.Instantiate<NonPlayer>();
@@ -58,17 +60,19 @@ public partial class NonPlayerSpawner : Node2D
         Vector2 halfExtents = viewportSize / 2 / _player.Camera.Zoom;
 
         Rect2 viewableArea = new(_player.Camera.GetScreenCenterPosition() - halfExtents, halfExtents * 2);
-        float margin = spawningNonPlayer.Radius * MarginMultiplier;
+        float margin = spawningNonPlayer.Radius * _marginMultiplier;
 
         Rect2 spawnAreaInnerBounds = viewableArea.Grow(margin);
 
+        if (GeometryError.RectNotEnclosedError(spawnAreaInnerBounds, spawnAreaOuterBounds)) return;
+
         Rect2[] spawnAreas =
-[
-    new(spawnAreaOuterBounds.Position.X, spawnAreaOuterBounds.Position.Y, spawnAreaOuterBounds.Size.X, spawnAreaInnerBounds.Position.Y - spawnAreaOuterBounds.Position.Y), // top
-    new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.End.Y, spawnAreaOuterBounds.Size.X, spawnAreaOuterBounds.End.Y - spawnAreaInnerBounds.End.Y),               // bottom
-    new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Position.Y, spawnAreaInnerBounds.Position.X - spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Size.Y), // left
-    new(spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Position.Y, spawnAreaOuterBounds.End.X - spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Size.Y),               // right
-];
+                            [
+                                new(spawnAreaOuterBounds.Position.X, spawnAreaOuterBounds.Position.Y, spawnAreaOuterBounds.Size.X, spawnAreaInnerBounds.Position.Y - spawnAreaOuterBounds.Position.Y), // top
+                                new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.End.Y, spawnAreaOuterBounds.Size.X, spawnAreaOuterBounds.End.Y - spawnAreaInnerBounds.End.Y),               // bottom
+                                new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Position.Y, spawnAreaInnerBounds.Position.X - spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Size.Y), // left
+                                new(spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Position.Y, spawnAreaOuterBounds.End.X - spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Size.Y),               // right
+                            ];
     }
 
 }

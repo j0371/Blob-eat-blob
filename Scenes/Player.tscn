@@ -2,16 +2,20 @@
 
 [ext_resource type="Script" uid="uid://bbft6rppw75xb" path="res://GameScripts/Player.cs" id="1_kyqiw"]
 [ext_resource type="PackedScene" uid="uid://dwtcl205x3r0h" path="res://Scenes/Blob.tscn" id="1_rpqav"]
+[ext_resource type="Script" uid="uid://dyns8kwjf5438" path="res://Scenes/SquarePlayerCamera2d.cs" id="3_gntrk"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dx8hr"]
 size = Vector2(2000, 2000)
 
-[node name="Player" unique_id=1008369897 instance=ExtResource("1_rpqav")]
+[node name="Player" unique_id=1008369897 node_paths=PackedStringArray("Camera", "ActiveBounds") instance=ExtResource("1_rpqav")]
 script = ExtResource("1_kyqiw")
+Camera = NodePath("SquarePlayerCamera2D")
+ActiveBounds = NodePath("NonPlayerActiveBoundsSquare/BoundsSquare")
 
-[node name="Camera2D" type="Camera2D" parent="." index="3" unique_id=212387332]
+[node name="SquarePlayerCamera2D" type="Camera2D" parent="." index="3" unique_id=212387332]
+script = ExtResource("3_gntrk")
 
-[node name="NonPlayerActiveBounds" type="Area2D" parent="." index="4" unique_id=1078959630]
+[node name="NonPlayerActiveBoundsSquare" type="Area2D" parent="." index="4" unique_id=1078959630]
 
-[node name="BoundsRectangle" type="CollisionShape2D" parent="NonPlayerActiveBounds" index="0" unique_id=1931180464]
+[node name="BoundsSquare" type="CollisionShape2D" parent="NonPlayerActiveBoundsSquare" index="0" unique_id=1931180464]
 shape = SubResource("RectangleShape2D_dx8hr")

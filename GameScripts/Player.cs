@@ -12,7 +12,7 @@ public partial class Player : Blob
     public Camera2D Camera { get; private set; }
 
     [Export]
-    public CollisionShape2D ActiveBounds { get; private set; }
+    public CollisionShape2D ActiveBounds{ get; private set; }
 
     protected override bool IsReady => base.IsReady &&
     !(this.RequiredGamePropertyNull(Camera) | this.RequiredGamePropertyNull(ActiveBounds));
@@ -25,6 +25,21 @@ public partial class Player : Blob
 
 
     //Methods
+
+    public override void _Ready()
+    {
+        if (!IsReady) return;
+
+        base._Ready();
+
+        RectangleShape2D activeSquare = (RectangleShape2D)ActiveBounds.Shape;
+
+        if (GeometryWarning.RectangleIsNotASquareWarning(activeSquare))
+        {
+            activeSquare.Size = Vector2.One * Mathf.Max(activeSquare.Size.X, activeSquare.Size.Y);
+        }
+	}
+
     public override void _PhysicsProcess(double delta)
     {
 
