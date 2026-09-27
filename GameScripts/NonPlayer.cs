@@ -9,7 +9,7 @@ namespace BlobEatBlob.Scripts;
 public partial class NonPlayer : Blob
 {
     //Necessary Godot Game Properties
-    protected new bool IsReady => base.IsReady;
+    protected override bool IsReady => base.IsReady;
 
 
     //Node Properties

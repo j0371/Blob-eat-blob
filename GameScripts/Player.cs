@@ -1,5 +1,6 @@
 
 using BlobEatBlob.Enums;
+using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
 
 namespace BlobEatBlob.Scripts;
@@ -7,7 +8,15 @@ namespace BlobEatBlob.Scripts;
 public partial class Player : Blob
 {
     //Necessary Godot Game Properties
-    protected new bool IsReady => base.IsReady;
+    [Export]
+    public Camera2D Camera { get; private set; }
+
+    [Export]
+    public CollisionShape2D ActiveBounds { get; private set; }
+
+    protected override bool IsReady => base.IsReady &&
+    !(this.RequiredGamePropertyNull(Camera) | this.RequiredGamePropertyNull(ActiveBounds));
+
 
     //Node Properties
 

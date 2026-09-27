@@ -3,7 +3,7 @@ using Godot;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using BlobEatBlob.HelperScripts;
+using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using BlobEatBlob.Scripts;
 
 namespace BlobEatBlob.GameScripts;
@@ -12,21 +12,21 @@ public partial class NonPlayerSpawner : Node2D
 {
     //Necessary Godot Game Properties
     [Export]
-    private CollisionShape2D _activeBounds;
+    private Player _player;
 
     [Export]
     private PackedScene _nonPlayerScene;
 
-    protected bool IsReady => !(this.DisableIfMissing(_nonPlayerScene) | this.DisableIfMissing(_activeBounds));
+    protected bool IsReady => !(this.RequiredGamePropertyNull(_player) | this.RequiredGamePropertyNull(_nonPlayerScene));
 
 
 
     //Node Properties
-    private Rect2 _spawnArea;
-
     public IEnumerable<NonPlayer> SpawnedNonPlayers => GetChildren().OfType<NonPlayer>();
 
     private const int MaxNonPlayerCount = 10;
+
+    private const float MarginMultiplier = 1.5f;
 
 
     //Other Properties
@@ -37,57 +37,38 @@ public partial class NonPlayerSpawner : Node2D
     public override void _Ready()
     {
         if (!IsReady) return;
-
-        List<Direction> directions = [.. Enum.GetValues<Direction>()];
-
-		RectangleShape2D activeBoundsRectangle = (RectangleShape2D)_activeBounds.Shape;
-
-		Vector2 size = activeBoundsRectangle.Size;
-		Vector2 center = _activeBounds.GlobalPosition;
-
-		_spawnArea = new(center - size / 2, size);
-
 	}
     
 	public override void _Process(double delta)
     {
-        if (SpawnedNonPlayers.Count() >= MaxNonPlayerCount) return;
+        if (SpawnedNonPlayers.Count() >= MaxNonPlayerCount || !IsInstanceValid(_player)) return;
 
-        Node2D nonPlayer = _nonPlayerScene.Instantiate<Node2D>();
+        //creating new non-player blob
+        NonPlayer spawningNonPlayer = _nonPlayerScene.Instantiate<NonPlayer>();
+        AddChild(spawningNonPlayer);
 
-        nonPlayer.Position = GetSpawnPosition();
-        AddChild(nonPlayer);
-    }
+        //Getting the outer bounds of the spawn area
+		Vector2 size = ((RectangleShape2D) _player.ActiveBounds.Shape).Size;
+		Vector2 center = _player.ActiveBounds.GlobalPosition;
 
-    private Vector2 GetSpawnPosition()
-    {
-        Rect2? visibleRect = GetSpawnAreaInnerBounds();
-        Vector2 position = new Vector2();
+		Rect2 spawnAreaOuterBounds = new(center - size / 2, size);
 
-        if (visibleRect.Value.HasPoint(position))
-        {
-            position = new Vector2(
-                _random.RandfRange(_spawnArea.Position.X, _spawnArea.End.X),
-                _random.RandfRange(_spawnArea.Position.Y, _spawnArea.End.Y));
-
-        }
-
-        return position;
-    }
-
-    private IEnumerable<Rect2> GetSpawnAreas()
-    {
-        Rect2 innerBounds = GetSpawnAreaInnerBounds();
-        return [innerBounds];
-    }
-
-    private Rect2 GetSpawnAreaInnerBounds ()
-    {
-        Camera2D playerCamera = GetViewport().GetCamera2D();
-
+        //Getting the inner bounds of the spawn area
         Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
-        Vector2 halfExtents = viewportSize / 2 / playerCamera.Zoom;
+        Vector2 halfExtents = viewportSize / 2 / _player.Camera.Zoom;
 
-        return new Rect2(playerCamera.GetScreenCenterPosition() - halfExtents, halfExtents * 2);
+        Rect2 viewableArea = new(_player.Camera.GetScreenCenterPosition() - halfExtents, halfExtents * 2);
+        float margin = spawningNonPlayer.Radius * MarginMultiplier;
+
+        Rect2 spawnAreaInnerBounds = viewableArea.Grow(margin);
+
+        Rect2[] spawnAreas =
+[
+    new(spawnAreaOuterBounds.Position.X, spawnAreaOuterBounds.Position.Y, spawnAreaOuterBounds.Size.X, spawnAreaInnerBounds.Position.Y - spawnAreaOuterBounds.Position.Y), // top
+    new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.End.Y, spawnAreaOuterBounds.Size.X, spawnAreaOuterBounds.End.Y - spawnAreaInnerBounds.End.Y),               // bottom
+    new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Position.Y, spawnAreaInnerBounds.Position.X - spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Size.Y), // left
+    new(spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Position.Y, spawnAreaOuterBounds.End.X - spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Size.Y),               // right
+];
     }
+
 }

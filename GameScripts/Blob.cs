@@ -1,5 +1,5 @@
 using Blobeatblob.Enums;
-using BlobEatBlob.HelperScripts;
+using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using BlobEatBlob.Scripts;
 using Godot;
 using System;
@@ -12,7 +12,7 @@ public partial class Blob : CharacterBody2D
     [Export]
     private Area2D _detectionArea;
 
-    protected bool IsReady => !this.DisableIfMissing(_detectionArea);
+    protected virtual bool IsReady => !this.RequiredGamePropertyNull(_detectionArea);
 
 
     //Node Properties
@@ -21,6 +21,8 @@ public partial class Blob : CharacterBody2D
     public int Size { get; private set; } = 1;
 
     public float Speed { get; private set; } = 300.0f;
+
+    public float Radius => ((CircleShape2D) GetNode<CollisionShape2D>("PhysicalCollision").Shape).Radius * GlobalScale.X;
 
 
     //Other Properties
