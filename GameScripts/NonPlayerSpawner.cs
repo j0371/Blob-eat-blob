@@ -45,6 +45,7 @@ public partial class NonPlayerSpawner : Node2D
 
         //creating new non-player blob
         NonPlayer spawningNonPlayer = _nonPlayerScene.Instantiate<NonPlayer>();
+        spawningNonPlayer.IsPreSpawning = true;
         AddChild(spawningNonPlayer);
 
         //Getting the outer bounds of the spawn area
@@ -55,7 +56,11 @@ public partial class NonPlayerSpawner : Node2D
 
         Rect2 spawnAreaInnerBounds = _player.Camera.ViewSquare.Grow(margin);
 
-        if (GeometryError.RectNotEnclosedError(spawnAreaInnerBounds, spawnAreaOuterBounds)) return;
+        if (GeometryError.RectNotEnclosedError(spawnAreaInnerBounds, spawnAreaOuterBounds))
+        {
+            spawningNonPlayer.QueueFree();
+            return;
+        }
 
         Rect2[] spawnAreas =
                             [
@@ -64,6 +69,36 @@ public partial class NonPlayerSpawner : Node2D
                                 new(spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Position.Y, spawnAreaInnerBounds.Position.X - spawnAreaOuterBounds.Position.X, spawnAreaInnerBounds.Size.Y), // left
                                 new(spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Position.Y, spawnAreaOuterBounds.End.X - spawnAreaInnerBounds.End.X, spawnAreaInnerBounds.Size.Y),               // right
                             ];
+
+        //Placing the blob at a random point within the spawn areas
+        spawningNonPlayer.GlobalPosition = GetRandomPointInAreas(spawnAreas);
+
+        //Re-adding the blob so it enters physics at its spawn point, not where it was pre-spawned
+        RemoveChild(spawningNonPlayer);
+        spawningNonPlayer.IsPreSpawning = false;
+        AddChild(spawningNonPlayer);
+    }
+
+    private Vector2 GetRandomPointInAreas(Rect2[] areas)
+    {
+        //Picking an area weighted by its size, so spawns are evenly spread across all areas
+        float roll = _random.RandfRange(0, areas.Sum(area => area.Area));
+        Rect2 chosenArea = areas[^1];
+
+        foreach (Rect2 area in areas)
+        {
+            if (roll <= area.Area)
+            {
+                chosenArea = area;
+                break;
+            }
+
+            roll -= area.Area;
+        }
+
+        return new Vector2(
+            _random.RandfRange(chosenArea.Position.X, chosenArea.End.X),
+            _random.RandfRange(chosenArea.Position.Y, chosenArea.End.Y));
     }
 
 }

@@ -20,5 +20,6 @@ texture = ExtResource("3_kln2b")
 script = ExtResource("5_pbw6q")
 _player = NodePath("../Player")
 _nonPlayerScene = ExtResource("5_v1gob")
+_maxNonPlayerCount = 30
 
 [editable path="Player"]

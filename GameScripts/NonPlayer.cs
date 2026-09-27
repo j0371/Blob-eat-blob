@@ -12,6 +12,13 @@ public partial class NonPlayer : Blob
     //Node Properties
     private Direction _moveDirection;
 
+    //While pre-spawning, the blob is removed from physics and doesn't process, so nothing can touch it
+    public bool IsPreSpawning
+    {
+        get => ProcessMode == ProcessModeEnum.Disabled;
+        set => ProcessMode = value ? ProcessModeEnum.Disabled : ProcessModeEnum.Inherit;
+    }
+
 
     //Other Properties
 
