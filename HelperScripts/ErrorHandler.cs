@@ -30,7 +30,7 @@ public static class GeometryWarning
     {
         if (Mathf.IsEqualApprox(rect.Size.X, rect.Size.Y)) return false;
 
-        GD.PushError($"Rect {rect} is not a square.");
+        GD.PushWarning($"Rect {rectName} is not a square.");
         return true;
     }
 
@@ -39,7 +39,16 @@ public static class GeometryWarning
     {
         if (Mathf.IsEqualApprox(rectangle.Size.X, rectangle.Size.Y)) return false;
 
-        GD.PushError($"Rect {rectangleName} is not a square.");
+        GD.PushWarning($"Rect {rectangleName} is not a square.");
+        return true;
+    }
+
+    public static bool VectorIsNotUniformWarning(Vector2 vector,
+        [CallerArgumentExpression(nameof(vector))] string vectorName = "")
+    {
+        if (Mathf.IsEqualApprox(vector.X, vector.Y)) return false;
+
+        GD.PushWarning($"Vector {vectorName} is not uniform.");
         return true;
     }
     

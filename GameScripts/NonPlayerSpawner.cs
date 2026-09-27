@@ -50,19 +50,12 @@ public partial class NonPlayerSpawner : Node2D
         AddChild(spawningNonPlayer);
 
         //Getting the outer bounds of the spawn area
-		Vector2 size = ((RectangleShape2D) _player.ActiveBounds.Shape).Size;
-		Vector2 center = _player.ActiveBounds.GlobalPosition;
-
-		Rect2 spawnAreaOuterBounds = new(center - size / 2, size);
+        Rect2 spawnAreaOuterBounds = _player.ActiveArea;
 
         //Getting the inner bounds of the spawn area
-        Vector2 viewportSize = GetViewport().GetVisibleRect().Size;
-        Vector2 halfExtents = viewportSize / 2 / _player.Camera.Zoom;
-
-        Rect2 viewableArea = new(_player.Camera.GetScreenCenterPosition() - halfExtents, halfExtents * 2);
         float margin = spawningNonPlayer.Radius * _marginMultiplier;
 
-        Rect2 spawnAreaInnerBounds = viewableArea.Grow(margin);
+        Rect2 spawnAreaInnerBounds = _player.Camera.ViewSquare.Grow(margin);
 
         if (GeometryError.RectNotEnclosedError(spawnAreaInnerBounds, spawnAreaOuterBounds)) return;
 

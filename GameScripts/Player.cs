@@ -1,5 +1,6 @@
 
 using BlobEatBlob.Enums;
+using BlobEatBlob.GameScripts;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
 
@@ -9,7 +10,7 @@ public partial class Player : Blob
 {
     //Necessary Godot Game Properties
     [Export]
-    public Camera2D Camera { get; private set; }
+    public SquarePlayerCamera2d Camera { get; private set; }
 
     [Export]
     public CollisionShape2D ActiveBounds{ get; private set; }
@@ -19,6 +20,16 @@ public partial class Player : Blob
 
 
     //Node Properties
+    public Rect2 ActiveArea
+    {
+        get
+        {
+            float scale = Mathf.Max(ActiveBounds.GlobalScale.X, ActiveBounds.GlobalScale.Y);
+            float side = ((RectangleShape2D)ActiveBounds.Shape).Size.X * scale;
+
+            return new Rect2(ActiveBounds.GlobalPosition - Vector2.One * side / 2, Vector2.One * side);
+        }
+    }
 
 
     //Other Properties
