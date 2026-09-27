@@ -1,8 +1,5 @@
 using BlobEatBlob.Enums;
-using BlobEatBlob.Scripts;
 using Godot;
-using System;
-using System.Collections.Generic;
 
 namespace BlobEatBlob.Scripts;
 

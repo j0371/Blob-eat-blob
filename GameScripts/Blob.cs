@@ -1,8 +1,6 @@
 using Blobeatblob.Enums;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
-using BlobEatBlob.Scripts;
 using Godot;
-using System;
 
 namespace BlobEatBlob.Scripts;
 

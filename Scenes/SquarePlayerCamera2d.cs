@@ -1,6 +1,5 @@
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
-using System;
 
 namespace BlobEatBlob.GameScripts;
 

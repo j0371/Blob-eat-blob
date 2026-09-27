@@ -1,9 +1,4 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Text;
-using System.Threading.Tasks;
 using Godot;
 
 namespace BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
@@ -25,15 +20,6 @@ public static class GeometryError
 
 public static class GeometryWarning
 {
-        public static bool RectangleIsNotASquareWarning(Rect2 rect,
-        [CallerArgumentExpression(nameof(rect))] string rectName = "")
-    {
-        if (Mathf.IsEqualApprox(rect.Size.X, rect.Size.Y)) return false;
-
-        GD.PushWarning($"Rect {rectName} is not a square.");
-        return true;
-    }
-
     public static bool RectangleIsNotASquareWarning(RectangleShape2D rectangle,
         [CallerArgumentExpression(nameof(rectangle))] string rectangleName = "")
     {
