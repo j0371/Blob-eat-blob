@@ -8,7 +8,11 @@ public enum Direction
     Up,
     Down,
     Left,
-    Right
+    Right,
+    UpRight,
+    UpLeft,
+    DownRight,
+    DownLeft
 }
 
 public static class DirectionExtensions
@@ -33,7 +37,11 @@ public static class DirectionExtensions
             Direction.Down => Vector2.Down,
             Direction.Left => Vector2.Left,
             Direction.Right => Vector2.Right,
-            _ => throw new ArgumentOutOfRangeException(nameof(direction))
+            Direction.UpRight => Vector2.Up + Vector2.Right,
+            Direction.UpLeft => Vector2.Up + Vector2.Left,
+            Direction.DownRight => Vector2.Down + Vector2.Right,
+            Direction.DownLeft => Vector2.Down + Vector2.Left,
+                    _ => throw new ArgumentOutOfRangeException(nameof(direction))
         };
     }
 }

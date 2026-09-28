@@ -1,4 +1,6 @@
+using System;
 using System.Dynamic;
+using System.Transactions;
 using BlobEatBlob.Enums;
 using Godot;
 
@@ -11,11 +13,12 @@ public partial class NonPlayer : Blob
 
 
     //Node Properties
-    private Direction _moveDirection;
+    private Vector2? _roamingDirection = null;
 
     public bool IsPreSpawning { get; private set; }
 
     //Other Properties
+    private RandomNumberGenerator randomRoamingGenerator = new();
 
     //Methods
     public override void _Ready()
@@ -27,22 +30,25 @@ public partial class NonPlayer : Blob
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
         Grow(randomGrow.RandiRange(0, 1));
-
-        MoveAndSlide(); //Move();
     }
 
     public override void _PhysicsProcess(double delta)
-	{
+    {
         base._PhysicsProcess(delta);
-        MoveAndSlide(); //Move();
+
+        Roam();
+
+        MoveAndSlide();
     }
 
-    private void Move()
+    private void Roam()
     {
-        RandomNumberGenerator random = new();
-        random.Randomize();
-        _moveDirection = (Direction)random.RandiRange(0, 3);
-        return;
+        if (_roamingDirection is not null && randomRoamingGenerator.RandiRange(0, 300) != 0) return;
+
+        Vector2 newRoamingDirection = Vector2.FromAngle(randomRoamingGenerator.RandiRange(0, 359)); //((Direction)randomRoamingGenerator.RandiRange(0, 7)).Vector();
+        
+        _roamingDirection = newRoamingDirection;
+        Velocity = newRoamingDirection * Speed; 
     }
 
     public bool SetIsPreSpawning(bool isPreSpawning)
