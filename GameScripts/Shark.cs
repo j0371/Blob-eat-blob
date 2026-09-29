@@ -27,6 +27,11 @@ public partial class Shark : Node2D
         _ => 0
     };
 
+    public bool IsChargingLunge => LungeState == LungeStates.LungeCharging;
+
+    //0 = no charge, 1 = fully charged
+    public double ChargeFraction => IsChargingLunge ? Math.Min(CurrentLungeStateTimer / GameConfig.Shark.MaxChargeSeconds, 1) : 0;
+
 
     //Other Properties
 

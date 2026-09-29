@@ -9,6 +9,8 @@ public partial class LungeCooldownBar : ProgressBar
     //Node Properties
     private Player _player;
 
+    private readonly StyleBoxFlat _chargeFillStyle = new() { BgColor = Colors.Orange };
+
 
     //Methods
     public override void _Ready()
@@ -25,6 +27,17 @@ public partial class LungeCooldownBar : ProgressBar
         Shark shark = IsInstanceValid(_player) ? _player.GetChildren().OfType<Shark>().FirstOrDefault() : null;
 
         Visible = shark != null;
-        if (shark != null) Value = 1 - shark.CooldownRemainingFraction; //fills up as it recharges
+        if (shark == null) return;
+
+        if (shark.IsChargingLunge)
+        {
+            AddThemeStyleboxOverride("fill", _chargeFillStyle);
+            Value = shark.ChargeFraction; //fills orange as the lunge charges
+        }
+        else
+        {
+            RemoveThemeStyleboxOverride("fill");
+            Value = 1 - shark.CooldownRemainingFraction; //fills up as it recharges
+        }
     }
 }
