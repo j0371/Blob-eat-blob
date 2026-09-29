@@ -15,7 +15,6 @@ public static class GameConfig
         public const int LargeGrowAmount = 2;
     }
 
-
     public static class NonPlayer
     {
         public const int MinStartingGrowth = 0;
@@ -27,6 +26,20 @@ public static class GameConfig
         public static int DirectionChangeWeight => Engine.PhysicsTicksPerSecond * averageNonPlayerDirectionChangeSeconds;
     }
 
+    public static class Shark
+    {
+        public const int AttackCooldownSeconds = 10;
+
+        public const int DefendCooldownSeconds = 10;
+
+        public const float LungeSpeedMultiplier = 3f;
+
+        public const double MaxChargeSeconds = 3;
+
+        public const double lungeSecondsPerChargeSecond = 1.0 / 3;
+
+        public const double LungeRecoverySeconds = 1;
+    }
 
     public static class NonPlayerSpawner
     {
@@ -34,21 +47,6 @@ public static class GameConfig
 
         public const float MarginMultiplier = 2f;
     }
-
-
-    public static class Shark
-    {
-        public const int AttackCooldownSeconds = 10;
-
-        public const int DefendCooldownSeconds = 10;
-
-        public const double MaxChargeSeconds = 3;
-
-        public const double LungeSeconds = 1;
-
-        public const double LungeRecoverySeconds = 1;
-    }
-
 
     public static class InputActions
     {

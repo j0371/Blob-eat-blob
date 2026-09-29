@@ -1,4 +1,6 @@
+using System.Dynamic;
 using Blobeatblob.Enums;
+using Blobeatblob.Enums.GameStates;
 using BlobEatBlob.HelperScripts;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
@@ -27,6 +29,8 @@ public partial class Blob : CharacterBody2D
 
     public virtual bool IsDefendPressed => false;
     public virtual Vector2 AimDirection => Vector2.Zero;
+
+    public BlobStates BlobState { get; private set; } = BlobStates.Normal;
 
 
     //Other Properties
@@ -80,5 +84,10 @@ public partial class Blob : CharacterBody2D
     {
         Size += growAmount;
         Scale = _baseScale * Size;
+    }
+
+    public void SetBlobState(BlobStates blobstate)
+    {
+        BlobState = blobstate;
     }
 }

@@ -25,15 +25,22 @@ public partial class Shark : Node2D
 
     private Blob SharkBlob => GetParent<Blob>();
 
+    private double LungeSeconds => Math.Min(chargeTimeSeconds, GameConfig.Shark.MaxChargeSeconds) * GameConfig.Shark.lungeSecondsPerChargeSecond;
+
     private LungeStates LungeState => true switch
     {
-        _ when chargeTimeSeconds > 0 && chargeTimeSeconds < GameConfig.Shark.MaxChargeSeconds && SharkBlob.IsAttackPressed && !(attackCooldownSecondsLeft > 0) => LungeStates.Charging,
+        _ when chargeTimeSeconds > 0 &&
+                chargeTimeSeconds < GameConfig.Shark.MaxChargeSeconds &&
+                SharkBlob.IsAttackPressed &&
+                !(attackCooldownSecondsLeft > 0)
+            => LungeStates.Charging,
         _ when chargeTimeSeconds >= GameConfig.Shark.MaxChargeSeconds || (chargeTimeSeconds > 0 && !SharkBlob.IsAttackPressed) => LungeStates.LungePrimed,
         _ when lungeSecondsLeft > 0 => LungeStates.Lunging,
+        _ when lungeSecondsLeft == 0 => LungeStates.LungeRecoveryPrimed,
         _ when lungeRecoverySecondsLeft > 0 => LungeStates.LungeRecovery,
         _ when attackCooldownSecondsLeft > 0 => LungeStates.OnCooldown,
         _ when SharkBlob.IsAttackPressed => LungeStates.ChargePrimed,
-        _ => LungeStates.AttackReady
+        _ => LungeStates.AttackReady,
     };
 
     //Other Properties
@@ -48,42 +55,23 @@ public partial class Shark : Node2D
     public override void _PhysicsProcess(double delta)
     {
 
-        switch (LungeState)
-        {
-            case LungeStates.AttackReady: WaitForAttack(); break;
-            case LungeStates.ChargePrimed: StartCharge(delta); break;
-            case LungeStates.Charging: Charge(delta); break;
-            case LungeStates.LungePrimed: StartLunge(); break;
-            case LungeStates.Lunging: ContinueLunge(delta); break;
-            case LungeStates.LungeRecovery: RecoverFromLunge(delta); break;
-            case LungeStates.OnCooldown: TickAttackCooldown(delta); break;
-        }
-
-        if (LungeState == LungeStates.LungeReady)
-        {
-            Blob sharkBlob = GetParent<Blob>();
-
-            if (sharkBlob is Player)
-            {
-                Vector2 mousePosition = GetGlobalMousePosition();
-
-            }
-
-            attackCooldownSecondsLeft = GameConfig.Shark.AttackCooldownSeconds;
-            chargeTimeSeconds = 0;
-        }
-        else if (Input.IsActionPressed(GameConfig.InputActions.Attack))
-        {
-            chargeTimeSeconds += delta;
-        }
-
-
+        Attack(delta);
 
     }
 
-    private void Attack()
+    private void Attack(double delta)
     {
-        
+        switch (LungeState)
+        {
+            case LungeStates.AttackReady: break;
+            case LungeStates.ChargePrimed: BuildAttackCharge(delta); break;
+            case LungeStates.Charging: BuildAttackCharge(delta); break;
+            case LungeStates.LungePrimed: StartLunge(); break;
+            case LungeStates.Lunging: Lunging(delta); break;
+            case LungeStates.LungeRecoveryPrimed: StartLungeRecovery(); break;
+            case LungeStates.LungeRecovery: RecoverFromLunge(delta); break;
+            case LungeStates.OnCooldown: CooldownAttack(delta); break;
+        }
     }
 
     private void Defend()
@@ -93,6 +81,37 @@ public partial class Shark : Node2D
 
     private void BuildAttackCharge(double delta)
     {
-        
+        chargeTimeSeconds += delta;
+    }
+
+    private void StartLunge()
+    {
+        SharkBlob.SetBlobState(BlobStates.Protected);
+        SharkBlob.Velocity = SharkBlob.AimDirection * (GameConfig.Blob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
+
+        attackCooldownSecondsLeft = GameConfig.Shark.AttackCooldownSeconds;
+        lungeSecondsLeft = LungeSeconds;
+        chargeTimeSeconds = 0;
+    }
+
+    private void Lunging(double delta)
+    {
+        lungeSecondsLeft = Math.Max(lungeSecondsLeft- delta, 0);
+    }
+
+    private void StartLungeRecovery()
+    {
+        SharkBlob.SetBlobState(BlobStates.Suppressed);
+        lungeRecoverySecondsLeft = GameConfig.Shark.LungeRecoverySeconds;
+    }
+
+    private void RecoverFromLunge(double delta)
+    {
+        lungeRecoverySecondsLeft = Math.Max(lungeRecoverySecondsLeft - delta, 0);
+    }
+
+    private void CooldownAttack(double delta)
+    {
+        attackCooldownSecondsLeft = Math.Max(attackCooldownSecondsLeft - delta, 0);
     }
 }

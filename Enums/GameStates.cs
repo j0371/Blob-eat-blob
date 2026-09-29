@@ -19,6 +19,7 @@ public enum LungeStates
     Charging,
     LungePrimed,
     Lunging,
+    LungeRecoveryPrimed,
     LungeRecovery,
     OnCooldown
 }
