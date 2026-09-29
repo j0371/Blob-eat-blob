@@ -13,35 +13,12 @@ public partial class Shark : Node2D
 
 
     //Node Properties
-    private double attackCooldownSecondsLeft = 0;
+    private LungeStates LungeState = LungeStates.AttackReady;
 
-    private double defendCooldownSecondsLeft = 0;
-
-    private double chargeTimeSeconds = 0;
-
-    private double lungeSecondsLeft = 0;
-
-    private double lungeRecoverySecondsLeft = 0;
+    private double CurrentLungeStateTimer;
 
     private Blob SharkBlob => GetParent<Blob>();
 
-    private double LungeSeconds => Math.Min(chargeTimeSeconds, GameConfig.Shark.MaxChargeSeconds) * GameConfig.Shark.lungeSecondsPerChargeSecond;
-
-    private LungeStates LungeState => true switch
-    {
-        _ when chargeTimeSeconds > 0 &&
-                chargeTimeSeconds < GameConfig.Shark.MaxChargeSeconds &&
-                SharkBlob.IsAttackPressed &&
-                !(attackCooldownSecondsLeft > 0)
-            => LungeStates.Charging,
-        _ when chargeTimeSeconds >= GameConfig.Shark.MaxChargeSeconds || (chargeTimeSeconds > 0 && !SharkBlob.IsAttackPressed) => LungeStates.LungePrimed,
-        _ when lungeSecondsLeft > 0 => LungeStates.Lunging,
-        _ when lungeSecondsLeft == 0 => LungeStates.LungeRecoveryPrimed,
-        _ when lungeRecoverySecondsLeft > 0 => LungeStates.LungeRecovery,
-        _ when attackCooldownSecondsLeft > 0 => LungeStates.OnCooldown,
-        _ when SharkBlob.IsAttackPressed => LungeStates.ChargePrimed,
-        _ => LungeStates.AttackReady,
-    };
 
     //Other Properties
 
@@ -54,64 +31,86 @@ public partial class Shark : Node2D
 
     public override void _PhysicsProcess(double delta)
     {
-
-        Attack(delta);
-
+        ManageAttackState(delta);
     }
 
-    private void Attack(double delta)
+    private void ManageAttackState(double delta)
     {
         switch (LungeState)
         {
-            case LungeStates.AttackReady: break;
-            case LungeStates.ChargePrimed: BuildAttackCharge(delta); break;
-            case LungeStates.Charging: BuildAttackCharge(delta); break;
-            case LungeStates.LungePrimed: StartLunge(); break;
-            case LungeStates.Lunging: Lunging(delta); break;
-            case LungeStates.LungeRecoveryPrimed: StartLungeRecovery(); break;
-            case LungeStates.LungeRecovery: RecoverFromLunge(delta); break;
-            case LungeStates.OnCooldown: CooldownAttack(delta); break;
+            case LungeStates.AttackReady:
+                bool IsValidAttack = SharkBlob.IsAttackPressed && SharkBlob.BlobState != BlobStates.Suppressed;
+                if (IsValidAttack) EnterLungeChargingState();
+                break;
+
+            case LungeStates.LungeCharging:
+                CurrentLungeStateTimer += delta;
+                bool IsLungeCharged = CurrentLungeStateTimer >= GameConfig.Shark.MaxChargeSeconds || !SharkBlob.IsAttackPressed;
+                if (IsLungeCharged) EnterLungingState();
+                break;
+
+            case LungeStates.Lunging:
+                CurrentLungeStateTimer -= delta;
+                bool IsDoneLunging = CurrentLungeStateTimer <= 0;
+                if (IsDoneLunging) EnterLungeRecoveryState();
+                break;
+
+            case LungeStates.LungeRecovery:
+                CurrentLungeStateTimer -= delta;
+                bool IsDoneRecovering = CurrentLungeStateTimer <= 0;
+                if (IsDoneRecovering) EnterLungeCooldownState();
+                break;
+
+            case LungeStates.OnCooldown:
+                CurrentLungeStateTimer -= delta;
+                bool IsAttackReady = CurrentLungeStateTimer <= 0;
+                if (IsAttackReady) EnterAttackReadyState();
+                break;
         }
+    }
+
+    private void EnterLungeState(LungeStates state, double timer)
+    {
+        LungeState = state;
+        CurrentLungeStateTimer = timer;
+    }
+
+    private void EnterLungeChargingState()
+    {
+        EnterLungeState(LungeStates.LungeCharging, 0);
+    }
+
+    private void EnterLungingState()
+    {
+        SharkBlob.SetBlobState(BlobStates.Protected);
+        SharkBlob.Velocity = SharkBlob.AimDirection * (GameConfig.Blob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
+        SharkBlob.SetIsMovementLocked(true);
+
+        double LungingTimer = Math.Min(CurrentLungeStateTimer, GameConfig.Shark.MaxChargeSeconds) * GameConfig.Shark.lungeSecondsPerChargeSecond;
+        EnterLungeState(LungeStates.Lunging, LungingTimer);
+    }
+
+    private void EnterLungeRecoveryState()
+    {
+        SharkBlob.SetBlobState(BlobStates.Suppressed);
+        SharkBlob.Velocity = Vector2.Zero;
+        EnterLungeState(LungeStates.LungeRecovery, GameConfig.Shark.LungeRecoverySeconds);
+    }
+
+    private void EnterLungeCooldownState()
+    {
+        SharkBlob.SetBlobState(BlobStates.Normal);
+        SharkBlob.SetIsMovementLocked(false);
+        EnterLungeState(LungeStates.OnCooldown, GameConfig.Shark.AttackCooldownSeconds);
+    }
+
+    private void EnterAttackReadyState()
+    {
+        EnterLungeState(LungeStates.AttackReady, 0);
     }
 
     private void Defend()
     {
 
-    }
-
-    private void BuildAttackCharge(double delta)
-    {
-        chargeTimeSeconds += delta;
-    }
-
-    private void StartLunge()
-    {
-        SharkBlob.SetBlobState(BlobStates.Protected);
-        SharkBlob.Velocity = SharkBlob.AimDirection * (GameConfig.Blob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
-
-        attackCooldownSecondsLeft = GameConfig.Shark.AttackCooldownSeconds;
-        lungeSecondsLeft = LungeSeconds;
-        chargeTimeSeconds = 0;
-    }
-
-    private void Lunging(double delta)
-    {
-        lungeSecondsLeft = Math.Max(lungeSecondsLeft- delta, 0);
-    }
-
-    private void StartLungeRecovery()
-    {
-        SharkBlob.SetBlobState(BlobStates.Suppressed);
-        lungeRecoverySecondsLeft = GameConfig.Shark.LungeRecoverySeconds;
-    }
-
-    private void RecoverFromLunge(double delta)
-    {
-        lungeRecoverySecondsLeft = Math.Max(lungeRecoverySecondsLeft - delta, 0);
-    }
-
-    private void CooldownAttack(double delta)
-    {
-        attackCooldownSecondsLeft = Math.Max(attackCooldownSecondsLeft - delta, 0);
     }
 }

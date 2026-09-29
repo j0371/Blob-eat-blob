@@ -44,9 +44,15 @@ public partial class NonPlayer : Blob
     {
         base._PhysicsProcess(delta);
 
-        Roam();
+        Move();
 
         MoveAndSlide();
+    }
+
+    private void Move()
+    {
+        Roam();
+        //TODO: add "blob detected" movement
     }
 
     private void Roam()

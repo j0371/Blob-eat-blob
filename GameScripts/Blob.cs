@@ -30,6 +30,8 @@ public partial class Blob : CharacterBody2D
     public virtual bool IsDefendPressed => false;
     public virtual Vector2 AimDirection => Vector2.Zero;
 
+    public bool IsMovementLocked { get; private set; } = false;
+
     public BlobStates BlobState { get; private set; } = BlobStates.Normal;
 
 
@@ -89,5 +91,10 @@ public partial class Blob : CharacterBody2D
     public void SetBlobState(BlobStates blobstate)
     {
         BlobState = blobstate;
+    }
+
+    public void SetIsMovementLocked(bool isMovementLocked)
+    {
+        IsMovementLocked = isMovementLocked;
     }
 }

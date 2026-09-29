@@ -63,10 +63,14 @@ public partial class Player : Blob
 
         Move();
 
+        MoveAndSlide();
+
     }
 
-    private Vector2 Move()
+    private void Move()
     {
+        if (IsMovementLocked) return;
+
         Vector2 direction = Input.GetVector(
             Direction.Left.Input(),
             Direction.Right.Input(),
@@ -74,8 +78,7 @@ public partial class Player : Blob
             Direction.Down.Input());
 
         Velocity = direction * Speed;
-        MoveAndSlide();
 
-        return Velocity;
+        return;
     }
 }

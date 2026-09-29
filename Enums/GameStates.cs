@@ -15,11 +15,8 @@ public enum BlobStates
 public enum LungeStates
 {
     AttackReady,
-    ChargePrimed,
-    Charging,
-    LungePrimed,
+    LungeCharging,
     Lunging,
-    LungeRecoveryPrimed,
     LungeRecovery,
     OnCooldown
 }
