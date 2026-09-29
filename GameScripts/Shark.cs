@@ -19,6 +19,14 @@ public partial class Shark : Node2D
 
     private Blob SharkBlob => GetParent<Blob>();
 
+    //0 = attack ready, 1 = attack just used
+    public double CooldownRemainingFraction => LungeState switch
+    {
+        LungeStates.Lunging or LungeStates.LungeRecovery => 1,
+        LungeStates.OnCooldown => CurrentLungeStateTimer / GameConfig.Shark.AttackCooldownSeconds,
+        _ => 0
+    };
+
 
     //Other Properties
 
