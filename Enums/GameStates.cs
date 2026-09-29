@@ -12,6 +12,12 @@ public enum BlobStates
     Shrouded
 }
 
+public enum AfflictingStates
+{
+    Normal,
+    Suppressing,
+}
+
 public enum LungeStates
 {
     AttackReady,

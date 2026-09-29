@@ -30,8 +30,6 @@ public static class GameConfig
     {
         public const int AttackCooldownSeconds = 10;
 
-        public const int DefendCooldownSeconds = 10;
-
         public const float LungeSpeedMultiplier = 3f;
 
         public const double MaxChargeSeconds = 3;
@@ -39,6 +37,10 @@ public static class GameConfig
         public const double lungeSecondsPerChargeSecond = 1.0 / 3;
 
         public const double LungeRecoverySeconds = 1;
+
+        public const double DeflectWindowSeconds = 0.5;
+
+        public const int DefendCooldownSeconds = 10;
     }
 
     public static class NonPlayerSpawner

@@ -14,8 +14,16 @@ public partial class Shark : Node2D
 
     //Node Properties
     private LungeStates LungeState = LungeStates.AttackReady;
+    
+    private DeflectStates DeflectState = DeflectStates.DeflectReady;
+
+    private AfflictingStates AfflictingState => (LungeState is LungeStates.Lunging || DeflectState is DeflectStates.Deflecting) 
+    ? AfflictingStates.Suppressing
+    : AfflictingStates.Normal;
 
     private double CurrentLungeStateTimer;
+
+    private double CurrentDeflectStateTimer = GameConfig.Shark.DeflectWindowSeconds;
 
     private Blob SharkBlob => GetParent<Blob>();
 
@@ -45,7 +53,11 @@ public partial class Shark : Node2D
     public override void _PhysicsProcess(double delta)
     {
         ManageAttackState(delta);
+        ManageDefendState(delta);
+        ManageAfflictingState();
     }
+
+#region Attack state management methods
 
     private void ManageAttackState(double delta)
     {
@@ -121,9 +133,54 @@ public partial class Shark : Node2D
     {
         EnterLungeState(LungeStates.AttackReady, 0);
     }
+#endregion
 
-    private void Defend()
+
+#region Defend state management methods
+    private void ManageDefendState(double delta)
     {
+        switch (DeflectState)
+        {
+            case DeflectStates.DeflectReady:
+                bool IsValidDefense = SharkBlob.IsDefendPressed && SharkBlob.BlobState != BlobStates.Suppressed;
+                if (IsValidDefense) EnterDeflectingState();
+                break;
 
+            case DeflectStates.Deflecting:
+                CurrentDeflectStateTimer -= delta;
+                bool IsLungeCharged = CurrentLungeStateTimer >= GameConfig.Shark.MaxChargeSeconds || !SharkBlob.IsAttackPressed;
+                if (IsLungeCharged) EnterLungingState();
+                break;
+
+            case DeflectStates.OnCooldown:
+                CurrentLungeStateTimer -= delta;
+                bool IsDoneLunging = CurrentLungeStateTimer <= 0;
+                if (IsDoneLunging) EnterLungeRecoveryState();
+                break;
+        }
     }
+
+    private void EnterDeflectingState()
+    {
+        SharkBlob.SetBlobState(BlobStates.Protected);
+        DeflectState = DeflectStates.Deflecting;
+    }
+
+    private void EnterDeflectCooldown()
+    {
+        CurrentDeflectStateTimer = GameConfig.Shark.DefendCooldownSeconds;
+        DeflectState = DeflectStates.OnCooldown;
+    }
+
+#endregion
+
+#region blob state management methods
+
+    private void ManageAfflictingState()
+    {
+        SharkBlob.SetAfflictingState(AfflictingState);
+    }
+
+#endregion
+
 }

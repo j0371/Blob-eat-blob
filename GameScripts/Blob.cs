@@ -34,6 +34,8 @@ public partial class Blob : CharacterBody2D
 
     public BlobStates BlobState { get; private set; } = BlobStates.Normal;
 
+    public AfflictingStates AfflictingState { get; private set; } = AfflictingStates.Normal;
+
 
     //Other Properties
 
@@ -45,7 +47,7 @@ public partial class Blob : CharacterBody2D
 
         _baseScale = Scale;
 
-        _detectionArea.BodyEntered += OnEnemyTouched;
+        _detectionArea.BodyEntered += OnEnemyCollide;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -53,31 +55,24 @@ public partial class Blob : CharacterBody2D
         
     }
 
-    private void OnEnemyTouched(Node2D body)
+    private void OnEnemyCollide(Node2D body)
     {
-        if (body == this || body is not Blob || body is Player)
-        {
-            return;
-        }
+        if (body == this || body is not Blob) return;
 
-        NonPlayer enemy = (NonPlayer) body;
+        Blob enemy = (Blob) body;
 
-        if (enemy.IsPreSpawning)
-        {
-            return;
-        }
+        if(enemy.AfflictingState is AfflictingStates.Suppressing) BlobState = BlobStates.Suppressed;
 
-        if (this.Size < enemy.Size)
-        {
-            QueueFree();
-            return;
-        }
+        if (Size > enemy.Size && enemy.BlobState is not (BlobStates.Protected or BlobStates.Shrouded)
+        || enemy.BlobState == BlobStates.Suppressed)
+            EatEnemy(enemy);
 
-        EatEnemy(enemy);
     }
 
     protected virtual void EatEnemy(Blob enemy)
     {
+        
+
         Grow(enemy.Size > this.Size ? BlobGrowAmount.Large.Size() : BlobGrowAmount.Small.Size());
         enemy.QueueFree();
     }
@@ -96,5 +91,10 @@ public partial class Blob : CharacterBody2D
     public void SetIsMovementLocked(bool isMovementLocked)
     {
         IsMovementLocked = isMovementLocked;
+    }
+
+    public void SetAfflictingState(AfflictingStates afflictingState)
+    {
+        AfflictingState = afflictingState;
     }
 }
