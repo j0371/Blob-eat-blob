@@ -12,6 +12,10 @@ public static class GameConfig
 
         public const float Deceleration = Speed * 15;
 
+        public const double SuppressionSeconds = 2;
+
+        public const float SuppressedSpeedFactor = 1f / 6;
+
         public const int StartingSize = 1;
 
         public const int SmallGrowAmount = 1;

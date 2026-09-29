@@ -47,6 +47,9 @@ public partial class NonPlayer : Blob
 
         Move();
 
+        if (_roamingDirection is Vector2 roamingDirection)
+            Velocity = roamingDirection * Speed;
+
         MoveAndSlide();
     }
 
@@ -78,5 +81,17 @@ public partial class NonPlayer : Blob
     private void OutOfBounds()
     {
         
+    }
+
+    protected override void EnterSuppressedState()
+    {
+        base.EnterSuppressedState();
+        SetSpeed(GameConfig.Blob.Speed * GameConfig.Blob.SuppressedSpeedFactor);
+    }
+
+    protected override void EnterNormalState()
+    {
+        base.EnterNormalState();
+        SetSpeed(GameConfig.Blob.Speed);
     }
 }

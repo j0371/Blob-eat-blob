@@ -19,6 +19,12 @@ public partial class Blob : CharacterBody2D
     //Node Properties
     private Vector2 _baseScale;
 
+    private SceneTreeTimer suppressionTimer;
+
+    public event System.Action CollidedWhileProtected;
+
+    public event System.Action<Blob> Afflicting;
+
     public int Size { get; private set; } = GameConfig.Blob.StartingSize;
 
     public float Speed { get; private set; } = GameConfig.Blob.Speed;
@@ -48,6 +54,7 @@ public partial class Blob : CharacterBody2D
         _baseScale = Scale;
 
         _detectionArea.BodyEntered += OnEnemyCollide;
+        Afflicting += OnAfflicted;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -61,12 +68,29 @@ public partial class Blob : CharacterBody2D
 
         Blob enemy = (Blob) body;
 
-        if(enemy.AfflictingState is AfflictingStates.Suppressing) BlobState = BlobStates.Suppressed;
+        if (enemy.AfflictingState is AfflictingStates.Suppressing) Afflict(enemy);
 
         if (Size > enemy.Size && enemy.BlobState is not (BlobStates.Protected or BlobStates.Shrouded)
-        || enemy.BlobState == BlobStates.Suppressed)
+        || enemy.BlobState == BlobStates.Suppressed && AfflictingState is not AfflictingStates.Suppressing)
             EatEnemy(enemy);
 
+        if (BlobState is BlobStates.Protected)
+        {
+            ClearSuppression();
+            CollidedWhileProtected?.Invoke();
+        }
+    }
+
+    public void Afflict(Blob afflicter)
+    {
+        Afflicting?.Invoke(afflicter);
+    }
+
+    protected virtual void OnAfflicted(Blob afflicter)
+    {
+        if (BlobState is BlobStates.Protected) return;
+
+        Suppress();
     }
 
     protected virtual void EatEnemy(Blob enemy)
@@ -83,9 +107,62 @@ public partial class Blob : CharacterBody2D
         Scale = _baseScale * Size;
     }
 
+    public void Suppress()
+    {
+        EnterSuppressedState();
+
+        CancelSuppressionTimer();
+        suppressionTimer = GetTree().CreateTimer(GameConfig.Blob.SuppressionSeconds);
+        suppressionTimer.Timeout += OnSuppressionEnded;
+    }
+
+    private void OnSuppressionEnded()
+    {
+        suppressionTimer = null;
+        if (BlobState is BlobStates.Suppressed) EnterNormalState();
+    }
+
+    private void CancelSuppressionTimer()
+    {
+        if (suppressionTimer is not null) suppressionTimer.Timeout -= OnSuppressionEnded;
+        suppressionTimer = null;
+    }
+
+    public void ClearSuppression()
+    {
+        CancelSuppressionTimer();
+        if (BlobState is BlobStates.Suppressed) EnterNormalState();
+    }
+
+    protected virtual void EnterNormalState()
+    {
+        BlobState = BlobStates.Normal;
+    }
+
+    protected virtual void EnterSuppressedState()
+    {
+        BlobState = BlobStates.Suppressed;
+    }
+
+    protected void SetSpeed(float speed)
+    {
+        Speed = speed;
+    }
+
     public void SetBlobState(BlobStates blobstate)
     {
-        BlobState = blobstate;
+        switch (blobstate)
+        {
+            case BlobStates.Normal:
+                EnterNormalState();
+                break;
+            case BlobStates.Suppressed:
+                EnterSuppressedState();
+                break;
+            default:
+                BlobState = blobstate;
+                break;
+        }
     }
 
     public void SetIsMovementLocked(bool isMovementLocked)

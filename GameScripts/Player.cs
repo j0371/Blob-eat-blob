@@ -67,6 +67,18 @@ public partial class Player : Blob
 
     }
 
+    protected override void EnterSuppressedState()
+    {
+        base.EnterSuppressedState();
+        SetSpeed(GameConfig.Blob.Speed * GameConfig.Blob.SuppressedSpeedFactor);
+    }
+
+    protected override void EnterNormalState()
+    {
+        base.EnterNormalState();
+        SetSpeed(GameConfig.Blob.Speed);
+    }
+
     private void Move(double delta)
     {
         if (IsMovementLocked) return;
