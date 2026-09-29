@@ -8,6 +8,10 @@ public static class GameConfig
     {
         public const float Speed = 300.0f;
 
+        public const float Acceleration = Speed * 10;
+
+        public const float Deceleration = Speed * 15;
+
         public const int StartingSize = 1;
 
         public const int SmallGrowAmount = 1;
@@ -30,7 +34,7 @@ public static class GameConfig
     {
         public const int AttackCooldownSeconds = 10;
 
-        public const float LungeSpeedMultiplier = 3f;
+        public const float LungeSpeedMultiplier = 1.5f;
 
         public const double MaxChargeSeconds = 3;
 

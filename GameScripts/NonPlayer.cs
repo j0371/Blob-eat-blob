@@ -37,7 +37,8 @@ public partial class NonPlayer : Blob
 
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
-        Grow(randomGrow.RandiRange(GameConfig.NonPlayer.MinStartingGrowth, GameConfig.NonPlayer.MaxStartingGrowth));
+        int NonPlayerRandomGrowRange = randomGrow.RandiRange(-5, 5);
+        Grow(NonPlayerRandomGrowRange);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -72,5 +73,10 @@ public partial class NonPlayer : Blob
         SetProcess(isPreSpawning);
 
         return IsPreSpawning;
+    }
+
+    private void OutOfBounds()
+    {
+        
     }
 }

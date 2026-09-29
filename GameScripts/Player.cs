@@ -61,13 +61,13 @@ public partial class Player : Blob
 
         base._PhysicsProcess(delta);
 
-        Move();
+        Move(delta);
 
         MoveAndSlide();
 
     }
 
-    private void Move()
+    private void Move(double delta)
     {
         if (IsMovementLocked) return;
 
@@ -77,7 +77,9 @@ public partial class Player : Blob
             Direction.Up.Input(),
             Direction.Down.Input());
 
-        Velocity = direction * Speed;
+        float rate = direction == Vector2.Zero ? GameConfig.Blob.Deceleration : GameConfig.Blob.Acceleration;
+
+        Velocity = Velocity.MoveToward(direction * Speed, rate * (float)delta);
 
         return;
     }
