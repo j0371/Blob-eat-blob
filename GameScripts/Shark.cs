@@ -6,6 +6,38 @@ using System;
 
 namespace BlobEatBlob.GameScripts;
 
+public class LungeAttackModeStateAndTimer
+(LungeStates currentLungeState, LungeStates nextLungeState = default, double startTime = default, double endTime = 0, bool increasingTimer = false)
+{
+    public LungeStates CurrentLungeState { get; set; } = currentLungeState;
+
+    public LungeStates NextLungeState { get; set; } = nextLungeState;
+
+    public double StartTime { get; set; } = startTime;
+
+    public double EndTime { get; set; } = endTime;
+
+    public bool IncreasingTimer {get; set; } = increasingTimer;
+
+    private double CurrentTime = startTime;
+
+    public bool ManageTimer(double delta, bool abort = false)
+    {
+
+        if (abort || (IncreasingTimer ? CurrentTime >= EndTime : CurrentTime <= EndTime))
+        {
+            EndTime = CurrentTime;
+            return true;
+        }
+
+        CurrentTime = IncreasingTimer
+        ? CurrentTime + delta
+        : CurrentTime - delta;
+ 
+        return false;
+    }
+}
+
 public partial class Shark : Node2D
 {
     //Necessary Godot Game Properties
@@ -25,23 +57,14 @@ public partial class Shark : Node2D
 
     private Blob SharkBlob => GetParent<Blob>();
 
-    private double LungeSeconds => Math.Min(chargeTimeSeconds, GameConfig.Shark.MaxChargeSeconds) * GameConfig.Shark.lungeSecondsPerChargeSecond;
+    LungeAttackModeStateAndTimer LungeStateAndTimer = new(LungeStates.AttackReady);
 
-    private LungeStates LungeState => true switch
-    {
-        _ when chargeTimeSeconds > 0 &&
-                chargeTimeSeconds < GameConfig.Shark.MaxChargeSeconds &&
-                SharkBlob.IsAttackPressed &&
-                !(attackCooldownSecondsLeft > 0)
-            => LungeStates.Charging,
-        _ when chargeTimeSeconds >= GameConfig.Shark.MaxChargeSeconds || (chargeTimeSeconds > 0 && !SharkBlob.IsAttackPressed) => LungeStates.LungePrimed,
-        _ when lungeSecondsLeft > 0 => LungeStates.Lunging,
-        _ when lungeSecondsLeft == 0 => LungeStates.LungeRecoveryPrimed,
-        _ when lungeRecoverySecondsLeft > 0 => LungeStates.LungeRecovery,
-        _ when attackCooldownSecondsLeft > 0 => LungeStates.OnCooldown,
-        _ when SharkBlob.IsAttackPressed => LungeStates.ChargePrimed,
-        _ => LungeStates.AttackReady,
-    };
+    private bool IsValidAttack =>
+    SharkBlob.BlobState != BlobStates.Suppressed &&
+    SharkBlob.IsAttackPressed &&
+    LungeStateAndTimer.CurrentLungeState == LungeStates.AttackReady;
+
+    private bool Attacking => LungeStateAndTimer.CurrentLungeState != LungeStates.AttackReady && LungeStateAndTimer.CurrentLungeState != LungeStates.OnCooldown;
 
     //Other Properties
 
@@ -50,68 +73,94 @@ public partial class Shark : Node2D
     public override void _Ready()
     {
         if (!IsReady) return;
+
+        LungeStateAndTimer = new(LungeStates.AttackReady);
     }
 
     public override void _PhysicsProcess(double delta)
     {
 
-        Attack(delta);
-
+        if (IsValidAttack)
+        {
+            LungeStateAndTimer =
+                new(LungeStates.LungeCharging, LungeStates.Lunging, 0, GameConfig.Shark.MaxChargeSeconds, true);
+        }
+        else if (Attacking)
+        {
+            ManageAttackMode(delta);
+        }
     }
 
-    private void Attack(double delta)
+    private void ManageAttackMode(double delta)
     {
-        switch (LungeState)
+        bool IsStateTimerDone = LungeStateAndTimer.ManageTimer(delta, !SharkBlob.IsAttackPressed);
+        if (IsStateTimerDone)
         {
-            case LungeStates.AttackReady: break;
-            case LungeStates.ChargePrimed: BuildAttackCharge(delta); break;
-            case LungeStates.Charging: BuildAttackCharge(delta); break;
-            case LungeStates.LungePrimed: StartLunge(); break;
-            case LungeStates.Lunging: Lunging(delta); break;
-            case LungeStates.LungeRecoveryPrimed: StartLungeRecovery(); break;
+            double lungingTimer = LungeStateAndTimer.EndTime * GameConfig.Shark.lungeSecondsPerChargeSecond;
+            LungeStateAndTimer = new(LungeStateAndTimer.NextLungeState, startTime: lungingTimer);
+        } 
+
+        switch (LungeStateAndTimer.CurrentLungeState)
+        {
+            case LungeStates.Lunging: StartLunge(); break;
             case LungeStates.LungeRecovery: RecoverFromLunge(delta); break;
             case LungeStates.OnCooldown: CooldownAttack(delta); break;
         }
     }
 
-    private void Defend()
-    {
-
-    }
-
-    private void BuildAttackCharge(double delta)
-    {
-        chargeTimeSeconds += delta;
-    }
-
     private void StartLunge()
     {
-        SharkBlob.SetBlobState(BlobStates.Protected);
-        SharkBlob.Velocity = SharkBlob.AimDirection * (GameConfig.Blob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
-
-        attackCooldownSecondsLeft = GameConfig.Shark.AttackCooldownSeconds;
-        lungeSecondsLeft = LungeSeconds;
+        lungeSecondsLeft = Math.Min(chargeTimeSeconds, GameConfig.Shark.MaxChargeSeconds) * GameConfig.Shark.lungeSecondsPerChargeSecond;
         chargeTimeSeconds = 0;
+
+        SharkBlob.Velocity = SharkBlob.AimDirection * (GameConfig.Blob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
+        SharkBlob.SetBlobState(BlobStates.Protected);
+
+        LungeStateAndTimer =
+                new(LungeStates.Lunging, LungeStates.LungeRecovery, LungeStateAndTimer.StartTime, );
     }
 
     private void Lunging(double delta)
     {
-        lungeSecondsLeft = Math.Max(lungeSecondsLeft- delta, 0);
+        lungeSecondsLeft -= delta;
+        if (lungeSecondsLeft <= 0) StartLungeRecovery();
     }
 
     private void StartLungeRecovery()
     {
-        SharkBlob.SetBlobState(BlobStates.Suppressed);
+        lungeSecondsLeft = 0;
         lungeRecoverySecondsLeft = GameConfig.Shark.LungeRecoverySeconds;
+
+        SharkBlob.SetBlobState(BlobStates.Suppressed);
+
+        LungeState = LungeStates.LungeRecovery;
     }
 
     private void RecoverFromLunge(double delta)
     {
-        lungeRecoverySecondsLeft = Math.Max(lungeRecoverySecondsLeft - delta, 0);
+        lungeRecoverySecondsLeft -= delta;
+        if (lungeRecoverySecondsLeft <= 0) StartAttackCooldown();
+    }
+
+    private void StartAttackCooldown()
+    {
+        lungeRecoverySecondsLeft = 0;
+        attackCooldownSecondsLeft = GameConfig.Shark.AttackCooldownSeconds;
+
+        SharkBlob.SetBlobState(BlobStates.Normal);
+
+        LungeState = LungeStates.OnCooldown;
     }
 
     private void CooldownAttack(double delta)
     {
-        attackCooldownSecondsLeft = Math.Max(attackCooldownSecondsLeft - delta, 0);
+        attackCooldownSecondsLeft -= delta;
+        if (attackCooldownSecondsLeft <= 0) StartAttackReady();
+    }
+
+    private void StartAttackReady()
+    {
+        attackCooldownSecondsLeft = 0;
+        LungeState = LungeStates.AttackReady;
     }
 }
