@@ -2,6 +2,7 @@ using System;
 using System.Dynamic;
 using System.Transactions;
 using BlobEatBlob.Enums;
+using BlobEatBlob.HelperScripts;
 using Godot;
 
 namespace BlobEatBlob.Scripts;
@@ -13,8 +14,6 @@ public partial class NonPlayer : Blob
 
 
     //Node Properties
-    private readonly int randomDirectionChangeWeight = Engine.PhysicsTicksPerSecond * 5; // 1/x chance for random direction change. Will trigger every 5 seconds on average
-
     private Vector2? _roamingDirection = null;
 
     public bool IsPreSpawning { get; private set; }
@@ -38,7 +37,7 @@ public partial class NonPlayer : Blob
 
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
-        Grow(randomGrow.RandiRange(0, 1));
+        Grow(randomGrow.RandiRange(GameConfig.NonPlayer.MinStartingGrowth, GameConfig.NonPlayer.MaxStartingGrowth));
     }
 
     public override void _PhysicsProcess(double delta)
@@ -52,7 +51,7 @@ public partial class NonPlayer : Blob
 
     private void Roam()
     {
-        if (_roamingDirection is not null && randomRoamingGenerator.RandiRange(0, randomDirectionChangeWeight) != 0) return;
+        if (_roamingDirection is not null && randomRoamingGenerator.RandiRange(0, GameConfig.NonPlayer.DirectionChangeWeight) != 0) return;
 
         Vector2 newRoamingDirection = Vector2.FromAngle(randomRoamingGenerator.RandiRange(0, 359)); //((Direction)randomRoamingGenerator.RandiRange(0, 7)).Vector();
         

@@ -1,6 +1,7 @@
 
 using BlobEatBlob.Enums;
 using BlobEatBlob.GameScripts;
+using BlobEatBlob.HelperScripts;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
 
@@ -31,8 +32,8 @@ public partial class Player : Blob
         }
     }
 
-    public override bool IsAttackPressed => Input.IsActionPressed("attack");
-    public override bool IsDefendPressed => Input.IsActionPressed("defend");
+    public override bool IsAttackPressed => Input.IsActionPressed(GameConfig.InputActions.Attack);
+    public override bool IsDefendPressed => Input.IsActionPressed(GameConfig.InputActions.Defend);
     public override Vector2 AimDirection => (GetGlobalMousePosition() - GlobalPosition).Normalized();
 
 

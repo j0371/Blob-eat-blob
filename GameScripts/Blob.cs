@@ -1,4 +1,5 @@
 using Blobeatblob.Enums;
+using BlobEatBlob.HelperScripts;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
 
@@ -16,9 +17,9 @@ public partial class Blob : CharacterBody2D
     //Node Properties
     private Vector2 _baseScale;
 
-    public int Size { get; private set; } = 1;
+    public int Size { get; private set; } = GameConfig.Blob.StartingSize;
 
-    public float Speed { get; private set; } = 300.0f;
+    public float Speed { get; private set; } = GameConfig.Blob.Speed;
 
     public float Radius => ((CircleShape2D) GetNode<CollisionShape2D>("PhysicalCollision").Shape).Radius * GlobalScale.X;
 

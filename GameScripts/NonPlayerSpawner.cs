@@ -1,6 +1,7 @@
 using Godot;
 using System.Collections.Generic;
 using System.Linq;
+using BlobEatBlob.HelperScripts;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using BlobEatBlob.Scripts;
 
@@ -20,12 +21,6 @@ public partial class NonPlayerSpawner : Node2D
 
 
     //Node Properties
-    [Export(PropertyHint.Range, "0,100")]
-    private int _maxNonPlayerCount = 10;
-
-    [Export(PropertyHint.Range, "-20,20")]
-    private float _marginMultiplier = 2f;
-
     public IEnumerable<NonPlayer> SpawnedNonPlayers => GetChildren().OfType<NonPlayer>();
 
 
@@ -41,14 +36,14 @@ public partial class NonPlayerSpawner : Node2D
     
 	public override void _Process(double delta)
     {
-        if (SpawnedNonPlayers.Count() >= _maxNonPlayerCount || !IsInstanceValid(_player)) return;
+        if (SpawnedNonPlayers.Count() >= GameConfig.NonPlayerSpawner.MaxNonPlayerCount || !IsInstanceValid(_player)) return;
 
 
         //Getting the outer bounds of the spawn area
         Rect2 spawnAreaOuterBounds = _player.ActiveArea;
 
         //Getting the inner bounds of the spawn area
-        float margin = _player.Radius * _marginMultiplier;
+        float margin = _player.Radius * GameConfig.NonPlayerSpawner.MarginMultiplier;
 
         Rect2 spawnAreaInnerBounds = _player.Camera.ViewSquare.Grow(margin);
 

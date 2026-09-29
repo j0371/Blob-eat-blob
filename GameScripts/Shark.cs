@@ -1,4 +1,5 @@
 using Blobeatblob.Enums.GameStates;
+using BlobEatBlob.HelperScripts;
 using BlobEatBlob.Scripts;
 using Godot;
 using System;
@@ -9,18 +10,6 @@ public partial class Shark : Node2D
 {
     //Necessary Godot Game Properties
     protected bool IsReady => true;
-
-
-    //Node Constants
-    private const int attackCooldownSeconds = 10;
-
-    private const int defendCooldownSeconds = 10;
-
-    private const double MaxChargeSeconds = 3;
-
-    private const double LungeSeconds = 1;
-
-    private const double lungeRecoverySeconds = 1;
 
 
     //Node Properties
@@ -38,8 +27,8 @@ public partial class Shark : Node2D
 
     private LungeStates LungeState => true switch
     {
-        _ when chargeTimeSeconds > 0 && chargeTimeSeconds < MaxChargeSeconds && SharkBlob.IsAttackPressed && !(attackCooldownSecondsLeft > 0) => LungeStates.Charging,
-        _ when chargeTimeSeconds >= MaxChargeSeconds || (chargeTimeSeconds > 0 && !SharkBlob.IsAttackPressed) => LungeStates.LungePrimed,
+        _ when chargeTimeSeconds > 0 && chargeTimeSeconds < GameConfig.Shark.MaxChargeSeconds && SharkBlob.IsAttackPressed && !(attackCooldownSecondsLeft > 0) => LungeStates.Charging,
+        _ when chargeTimeSeconds >= GameConfig.Shark.MaxChargeSeconds || (chargeTimeSeconds > 0 && !SharkBlob.IsAttackPressed) => LungeStates.LungePrimed,
         _ when lungeSecondsLeft > 0 => LungeStates.Lunging,
         _ when lungeRecoverySecondsLeft > 0 => LungeStates.LungeRecovery,
         _ when attackCooldownSecondsLeft > 0 => LungeStates.OnCooldown,
@@ -80,10 +69,10 @@ public partial class Shark : Node2D
 
             }
 
-            attackCooldownSecondsLeft = attackCooldownSeconds;
+            attackCooldownSecondsLeft = GameConfig.Shark.AttackCooldownSeconds;
             chargeTimeSeconds = 0;
         }
-        else if (Input.IsActionPressed("attack"))
+        else if (Input.IsActionPressed(GameConfig.InputActions.Attack))
         {
             chargeTimeSeconds += delta;
         }

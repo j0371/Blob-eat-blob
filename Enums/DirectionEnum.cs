@@ -1,5 +1,6 @@
 using Godot;
 using System;
+using BlobEatBlob.HelperScripts;
 
 namespace BlobEatBlob.Enums;
 
@@ -21,10 +22,10 @@ public static class DirectionExtensions
     {
         return direction switch
         {
-            Direction.Up => "up",
-            Direction.Down => "down",
-            Direction.Left => "left",
-            Direction.Right => "right",
+            Direction.Up => GameConfig.InputActions.Up,
+            Direction.Down => GameConfig.InputActions.Down,
+            Direction.Left => GameConfig.InputActions.Left,
+            Direction.Right => GameConfig.InputActions.Right,
             _ => throw new ArgumentOutOfRangeException(nameof(direction))
         };
     }
