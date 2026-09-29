@@ -2,6 +2,7 @@
 
 [ext_resource type="Script" uid="uid://cirgnboxfpbw2" path="res://GameScripts/Blob.cs" id="1_jp85t"]
 [ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_rq8tt"]
+[ext_resource type="Script" uid="uid://bpd2l4y4g4i6g" path="res://GameScripts/Shark.cs" id="3_rq8tt"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
 radius = 2.009975
@@ -24,3 +25,6 @@ scale = Vector2(5, 5)
 
 [node name="DetectionRectangle" type="CollisionShape2D" parent="EnemyDetection" unique_id=193483932]
 shape = SubResource("CircleShape2D_dewec")
+
+[node name="Shark" type="Node2D" parent="." unique_id=776459442]
+script = ExtResource("3_rq8tt")

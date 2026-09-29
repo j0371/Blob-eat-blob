@@ -31,6 +31,10 @@ public partial class Player : Blob
         }
     }
 
+    public override bool IsAttackPressed => Input.IsActionPressed("attack");
+    public override bool IsDefendPressed => Input.IsActionPressed("defend");
+    public override Vector2 AimDirection => (GetGlobalMousePosition() - GlobalPosition).Normalized();
+
 
     //Other Properties
 

@@ -22,6 +22,11 @@ public partial class Blob : CharacterBody2D
 
     public float Radius => ((CircleShape2D) GetNode<CollisionShape2D>("PhysicalCollision").Shape).Radius * GlobalScale.X;
 
+    public virtual bool IsAttackPressed => false;
+
+    public virtual bool IsDefendPressed => false;
+    public virtual Vector2 AimDirection => Vector2.Zero;
+
 
     //Other Properties
 

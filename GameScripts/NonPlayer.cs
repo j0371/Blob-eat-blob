@@ -13,9 +13,18 @@ public partial class NonPlayer : Blob
 
 
     //Node Properties
+    private readonly int randomDirectionChangeWeight = Engine.PhysicsTicksPerSecond * 5; // 1/x chance for random direction change. Will trigger every 5 seconds on average
+
     private Vector2? _roamingDirection = null;
 
     public bool IsPreSpawning { get; private set; }
+
+    // NonPlayer.cs – whatever AI you want
+    public override bool IsAttackPressed => false;
+
+    public override bool IsDefendPressed => false;
+
+    public override Vector2 AimDirection => new ();
 
     //Other Properties
     private RandomNumberGenerator randomRoamingGenerator = new();
@@ -43,7 +52,7 @@ public partial class NonPlayer : Blob
 
     private void Roam()
     {
-        if (_roamingDirection is not null && randomRoamingGenerator.RandiRange(0, 300) != 0) return;
+        if (_roamingDirection is not null && randomRoamingGenerator.RandiRange(0, randomDirectionChangeWeight) != 0) return;
 
         Vector2 newRoamingDirection = Vector2.FromAngle(randomRoamingGenerator.RandiRange(0, 359)); //((Direction)randomRoamingGenerator.RandiRange(0, 7)).Vector();
         

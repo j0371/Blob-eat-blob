@@ -12,10 +12,10 @@ script = ExtResource("1_kyqiw")
 Camera = NodePath("SquarePlayerCamera2D")
 ActiveBounds = NodePath("NonPlayerActiveBoundsSquare/BoundsSquare")
 
-[node name="SquarePlayerCamera2D" type="Camera2D" parent="." index="3" unique_id=212387332]
+[node name="SquarePlayerCamera2D" type="Camera2D" parent="." index="4" unique_id=212387332]
 script = ExtResource("3_gntrk")
 
-[node name="NonPlayerActiveBoundsSquare" type="Area2D" parent="." index="4" unique_id=1078959630]
+[node name="NonPlayerActiveBoundsSquare" type="Area2D" parent="." index="5" unique_id=1078959630]
 
 [node name="BoundsSquare" type="CollisionShape2D" parent="NonPlayerActiveBoundsSquare" index="0" unique_id=1931180464]
 shape = SubResource("RectangleShape2D_dx8hr")
