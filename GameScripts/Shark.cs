@@ -44,6 +44,21 @@ public partial class Shark : Node2D
     //0 = no charge, 1 = fully charged
     public double ChargeFraction => IsChargingLunge ? Math.Min(CurrentLungeStateTimer / GameConfig.Shark.MaxChargeSeconds, 1) : 0;
 
+    //true when nothing is blocking a lunge charge from starting
+    public bool CanStartLunge => LungeState is LungeStates.AttackReady
+        && SharkBlob.BlobState != BlobStates.Suppressed
+        && DeflectState is DeflectStates.DeflectReady;
+
+    public bool IsDeflecting => DeflectState == DeflectStates.Deflecting;
+
+    //0 = deflect ready, 1 = deflect just used
+    public double DeflectCooldownRemainingFraction => DeflectState switch
+    {
+        DeflectStates.Deflecting => 1,
+        DeflectStates.OnCooldown => Math.Max(CurrentDeflectStateTimer / GameConfig.Shark.DefendCooldownSeconds, 0),
+        _ => 0
+    };
+
 
     //Other Properties
 
@@ -70,9 +85,7 @@ public partial class Shark : Node2D
         switch (LungeState)
         {
             case LungeStates.AttackReady:
-                bool IsDefenseActive = DeflectState is DeflectStates.Deflecting or DeflectStates.OnCooldown;
-                bool IsValidAttack = SharkBlob.IsAttackPressed && SharkBlob.BlobState != BlobStates.Suppressed && !IsDefenseActive;
-                if (IsValidAttack) EnterLungeChargingState();
+                if (SharkBlob.IsAttackPressed && CanStartLunge) EnterLungeChargingState();
                 break;
 
             case LungeStates.LungeCharging:
