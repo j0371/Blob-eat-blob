@@ -67,18 +67,6 @@ public partial class Player : Blob
 
     }
 
-    protected override void EnterSuppressedState()
-    {
-        base.EnterSuppressedState();
-        SetSpeed(GameConfig.Blob.Speed * GameConfig.Blob.SuppressedSpeedFactor);
-    }
-
-    protected override void EnterNormalState()
-    {
-        base.EnterNormalState();
-        SetSpeed(GameConfig.Blob.Speed);
-    }
-
     private void Move(double delta)
     {
         if (IsMovementLocked) return;
@@ -92,7 +80,5 @@ public partial class Player : Blob
         float rate = direction == Vector2.Zero ? GameConfig.Blob.Deceleration : GameConfig.Blob.Acceleration;
 
         Velocity = Velocity.MoveToward(direction * Speed, rate * (float)delta);
-
-        return;
     }
 }

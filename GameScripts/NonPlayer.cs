@@ -1,7 +1,3 @@
-using System;
-using System.Dynamic;
-using System.Transactions;
-using BlobEatBlob.Enums;
 using BlobEatBlob.HelperScripts;
 using Godot;
 
@@ -18,12 +14,6 @@ public partial class NonPlayer : Blob
 
     public bool IsPreSpawning { get; private set; }
 
-    // NonPlayer.cs – whatever AI you want
-    public override bool IsAttackPressed => false;
-
-    public override bool IsDefendPressed => false;
-
-    public override Vector2 AimDirection => new ();
 
     //Other Properties
     private RandomNumberGenerator randomRoamingGenerator = new();
@@ -37,7 +27,7 @@ public partial class NonPlayer : Blob
 
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
-        int NonPlayerRandomGrowRange = randomGrow.RandiRange(-5, 5);
+        int NonPlayerRandomGrowRange = randomGrow.RandiRange(GameConfig.NonPlayer.MinStartingGrowth, GameConfig.NonPlayer.MaxStartingGrowth);
         Grow(NonPlayerRandomGrowRange);
     }
 
@@ -63,7 +53,7 @@ public partial class NonPlayer : Blob
     {
         if (_roamingDirection is not null && randomRoamingGenerator.RandiRange(0, GameConfig.NonPlayer.DirectionChangeWeight) != 0) return;
 
-        Vector2 newRoamingDirection = Vector2.FromAngle(randomRoamingGenerator.RandiRange(0, 359)); //((Direction)randomRoamingGenerator.RandiRange(0, 7)).Vector();
+        Vector2 newRoamingDirection = Vector2.FromAngle(randomRoamingGenerator.RandiRange(0, 359));
         
         _roamingDirection = newRoamingDirection;
         Velocity = newRoamingDirection * Speed; 
@@ -76,22 +66,5 @@ public partial class NonPlayer : Blob
         SetProcess(isPreSpawning);
 
         return IsPreSpawning;
-    }
-
-    private void OutOfBounds()
-    {
-        
-    }
-
-    protected override void EnterSuppressedState()
-    {
-        base.EnterSuppressedState();
-        SetSpeed(GameConfig.Blob.Speed * GameConfig.Blob.SuppressedSpeedFactor);
-    }
-
-    protected override void EnterNormalState()
-    {
-        base.EnterNormalState();
-        SetSpeed(GameConfig.Blob.Speed);
     }
 }

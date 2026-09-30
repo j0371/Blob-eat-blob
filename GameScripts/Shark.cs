@@ -135,7 +135,7 @@ public partial class Shark : Node2D
 
     private void EnterLungeCooldownState()
     {
-        SharkBlob.SetBlobState(BlobStates.Normal);
+        //no reset to Normal here, so a missed lunge's suppression runs its full length
         SharkBlob.SetIsMovementLocked(false);
         EnterLungeState(LungeStates.OnCooldown, GameConfig.Shark.AttackCooldownSeconds, EnterAttackReadyState);
     }

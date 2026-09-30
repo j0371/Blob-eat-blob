@@ -1,4 +1,3 @@
-using System.Dynamic;
 using Blobeatblob.Enums;
 using Blobeatblob.Enums.GameStates;
 using BlobEatBlob.HelperScripts;
@@ -25,6 +24,8 @@ public partial class Blob : CharacterBody2D
 
     public event System.Action<Blob> Afflicting;
 
+    public event System.Action<BlobStates> StateChanged;
+
     public int Size { get; private set; } = GameConfig.Blob.StartingSize;
 
     public float Speed { get; private set; } = GameConfig.Blob.Speed;
@@ -38,7 +39,20 @@ public partial class Blob : CharacterBody2D
 
     public bool IsMovementLocked { get; private set; } = false;
 
-    public BlobStates BlobState { get; private set; } = BlobStates.Normal;
+    private BlobStates blobState = BlobStates.Normal;
+
+    //Every blob state change goes through here, so StateChanged is the one place to react to it
+    public BlobStates BlobState
+    {
+        get => blobState;
+        private set
+        {
+            if (blobState == value) return;
+
+            blobState = value;
+            StateChanged?.Invoke(value);
+        }
+    }
 
     public AfflictingStates AfflictingState { get; private set; } = AfflictingStates.Normal;
 
@@ -55,6 +69,7 @@ public partial class Blob : CharacterBody2D
 
         _detectionArea.BodyEntered += OnEnemyCollide;
         Afflicting += OnAfflicted;
+        StateChanged += OnStateChanged;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -109,7 +124,7 @@ public partial class Blob : CharacterBody2D
 
     public void Suppress()
     {
-        EnterSuppressedState();
+        BlobState = BlobStates.Suppressed;
 
         CancelSuppressionTimer();
         suppressionTimer = GetTree().CreateTimer(GameConfig.Blob.SuppressionSeconds);
@@ -119,7 +134,7 @@ public partial class Blob : CharacterBody2D
     private void OnSuppressionEnded()
     {
         suppressionTimer = null;
-        if (BlobState is BlobStates.Suppressed) EnterNormalState();
+        if (BlobState is BlobStates.Suppressed) BlobState = BlobStates.Normal;
     }
 
     private void CancelSuppressionTimer()
@@ -131,38 +146,19 @@ public partial class Blob : CharacterBody2D
     public void ClearSuppression()
     {
         CancelSuppressionTimer();
-        if (BlobState is BlobStates.Suppressed) EnterNormalState();
+        if (BlobState is BlobStates.Suppressed) BlobState = BlobStates.Normal;
     }
 
-    protected virtual void EnterNormalState()
+    private void OnStateChanged(BlobStates newState)
     {
-        BlobState = BlobStates.Normal;
-    }
-
-    protected virtual void EnterSuppressedState()
-    {
-        BlobState = BlobStates.Suppressed;
-    }
-
-    protected void SetSpeed(float speed)
-    {
-        Speed = speed;
+        Speed = newState is BlobStates.Suppressed
+            ? GameConfig.Blob.Speed * GameConfig.Blob.SuppressedSpeedFactor
+            : GameConfig.Blob.Speed;
     }
 
     public void SetBlobState(BlobStates blobstate)
     {
-        switch (blobstate)
-        {
-            case BlobStates.Normal:
-                EnterNormalState();
-                break;
-            case BlobStates.Suppressed:
-                EnterSuppressedState();
-                break;
-            default:
-                BlobState = blobstate;
-                break;
-        }
+        BlobState = blobstate;
     }
 
     public void SetIsMovementLocked(bool isMovementLocked)

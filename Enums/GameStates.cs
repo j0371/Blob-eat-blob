@@ -1,6 +1,3 @@
-using System;
-using BlobEatBlob.GameScripts;
-
 namespace Blobeatblob.Enums.GameStates;
 
 public enum BlobStates
