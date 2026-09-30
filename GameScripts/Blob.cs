@@ -26,7 +26,7 @@ public partial class Blob : CharacterBody2D
 
     public event System.Action<BlobStates> StateChanged;
 
-    public int Size { get; protected set; } = GameConfig.Blob.StartingSize;
+    public int Size { get; protected set; }
 
     public float Speed { get; private set; } = GameConfig.Blob.Speed;
 

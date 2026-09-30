@@ -48,6 +48,9 @@ public partial class Player : Blob
 
         base._Ready();
 
+        Size = GameConfig.Blob.StartingSize;
+        Scale = _baseScale * Size;
+
         RectangleShape2D activeSquare = (RectangleShape2D)ActiveBounds.Shape;
 
         if (GeometryWarning.RectangleIsNotASquareWarning(activeSquare))

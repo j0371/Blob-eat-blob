@@ -36,6 +36,9 @@ public partial class NonPlayerSpawner : Node2D
     
 	public override void _Process(double delta)
     {
+
+        FreeOutOfBoundNonplayers();
+
         if (SpawnedNonPlayers.Count() >= GameConfig.NonPlayerSpawner.MaxNonPlayerCount || !IsInstanceValid(_player)) return;
 
 
@@ -64,9 +67,22 @@ public partial class NonPlayerSpawner : Node2D
         //Placing the blob at a random point within the spawn areas
         spawningNonPlayer.GlobalPosition = GetRandomPointInAreas(spawnAreas);
         spawningNonPlayer.SetIsPreSpawning(false);
-        spawningNonPlayer.SetInitialSize(_player);
 
         AddChild(spawningNonPlayer);
+        spawningNonPlayer.SetInitialSize(_player);
+    }
+
+    private void FreeOutOfBoundNonplayers()
+    {
+        if (!IsInstanceValid(_player)) return;
+
+        Rect2 spawnAreaOuterBounds = _player.ActiveArea;
+
+        //Despawning blobs that wandered out of the active area
+        foreach (NonPlayer nonPlayer in SpawnedNonPlayers)
+            if (!spawnAreaOuterBounds.HasPoint(nonPlayer.GlobalPosition)) nonPlayer.QueueFree();
+
+        if (SpawnedNonPlayers.Count() >= GameConfig.NonPlayerSpawner.MaxNonPlayerCount) return;
     }
 
     private Vector2 GetRandomPointInAreas(Rect2[] areas)

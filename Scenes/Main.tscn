@@ -17,6 +17,9 @@ texture = ExtResource("3_kln2b")
 
 [node name="Player" parent="." unique_id=1008369897 instance=ExtResource("2_idj7w")]
 
+[node name="BoundsSquare" parent="Player/NonPlayerActiveBoundsSquare" parent_id_path=PackedInt32Array(1008369897, 1078959630) index="0" unique_id=1931180464]
+position = Vector2(15, -80)
+
 [node name="NonPlayerSpawner" type="Node2D" parent="." unique_id=756965952 node_paths=PackedStringArray("_player")]
 script = ExtResource("5_pbw6q")
 _player = NodePath("../Player")

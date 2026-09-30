@@ -1,3 +1,4 @@
+using System;
 using BlobEatBlob.HelperScripts;
 using Godot;
 
@@ -32,7 +33,7 @@ public partial class NonPlayer : Blob
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
 
-        Size = randomGrow.RandiRange(-GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer + player.Size, GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer + player.Size);
+        Size = randomGrow.RandiRange(Math.Max(player.Size - GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer, 1), player.Size + GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer);
         Scale = _baseScale * Size;
     }
 

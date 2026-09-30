@@ -16,7 +16,7 @@ public static class GameConfig
 
         public const float SuppressedSpeedFactor = 1f / 6;
 
-        public const int StartingSize = 1;
+        public const int StartingSize = 6;
 
         public const int SmallGrowAmount = 1;
 
@@ -36,9 +36,9 @@ public static class GameConfig
     {
         public const int AttackCooldownSeconds = 10;
 
-        public const float LungeSpeedMultiplier = 1.5f;
+        public const float LungeSpeedMultiplier = 3f;
 
-        public const double MaxChargeSeconds = 3;
+        public const double MaxChargeSeconds = 1;
 
         public const double lungeSecondsPerChargeSecond = 1.0 / 3;
 
@@ -51,7 +51,7 @@ public static class GameConfig
 
     public static class NonPlayerSpawner
     {
-        public const int MaxNonPlayerCount = 30;
+        public const int MaxNonPlayerCount = 50;
 
         public const float MarginMultiplier = 2f;
     }
