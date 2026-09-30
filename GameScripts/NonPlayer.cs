@@ -25,10 +25,15 @@ public partial class NonPlayer : Blob
 
         base._Ready();
 
+    }
+
+    public void SetInitialSize(Player player)
+    {
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
-        int NonPlayerRandomGrowRange = randomGrow.RandiRange(GameConfig.NonPlayer.MinStartingGrowth, GameConfig.NonPlayer.MaxStartingGrowth);
-        Grow(NonPlayerRandomGrowRange);
+
+        Size = randomGrow.RandiRange(-GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer + player.Size, GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer + player.Size);
+        Scale = _baseScale * Size;
     }
 
     public override void _PhysicsProcess(double delta)

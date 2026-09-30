@@ -16,7 +16,7 @@ public partial class Blob : CharacterBody2D
 
 
     //Node Properties
-    private Vector2 _baseScale;
+    protected Vector2 _baseScale;
 
     private SceneTreeTimer suppressionTimer;
 
@@ -26,7 +26,7 @@ public partial class Blob : CharacterBody2D
 
     public event System.Action<BlobStates> StateChanged;
 
-    public int Size { get; private set; } = GameConfig.Blob.StartingSize;
+    public int Size { get; protected set; } = GameConfig.Blob.StartingSize;
 
     public float Speed { get; private set; } = GameConfig.Blob.Speed;
 

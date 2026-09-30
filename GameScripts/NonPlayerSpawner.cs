@@ -64,6 +64,7 @@ public partial class NonPlayerSpawner : Node2D
         //Placing the blob at a random point within the spawn areas
         spawningNonPlayer.GlobalPosition = GetRandomPointInAreas(spawnAreas);
         spawningNonPlayer.SetIsPreSpawning(false);
+        spawningNonPlayer.SetInitialSize(_player);
 
         AddChild(spawningNonPlayer);
     }

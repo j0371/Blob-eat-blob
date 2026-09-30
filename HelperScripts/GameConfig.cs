@@ -25,9 +25,7 @@ public static class GameConfig
 
     public static class NonPlayer
     {
-        public const int MinStartingGrowth = 0; //keep at 0 or above, or non-players can spawn with a size of 0 or less
-
-        public const int MaxStartingGrowth = 5;
+        public const int blobSpawnSizeRangeFromPlayer = 5;
 
         private const int averageNonPlayerDirectionChangeSeconds = 5; //The average number of seconds it takes before a nonplayer blob changes directions (varies randomly)
 
