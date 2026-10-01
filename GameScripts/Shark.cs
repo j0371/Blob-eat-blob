@@ -47,7 +47,7 @@ public partial class Shark : Node2D
     //true when nothing is blocking a lunge charge from starting
     public bool CanStartLunge => LungeState is LungeStates.AttackReady
         && SharkBlob.BlobState != BlobStates.Suppressed
-        && DeflectState is DeflectStates.DeflectReady;
+        && DeflectState is not DeflectStates.Deflecting;
 
     public bool IsDeflecting => DeflectState == DeflectStates.Deflecting;
 
@@ -170,7 +170,7 @@ public partial class Shark : Node2D
         if (LungeState is LungeStates.Lunging) lungeHitEnemy = true;
         else if (LungeState is LungeStates.LungeRecovery or LungeStates.OnCooldown) RefreshLungeAbility();
 
-        if (DeflectState is DeflectStates.OnCooldown) DeflectState = DeflectStates.DeflectReady;
+        if (DeflectState is DeflectStates.OnCooldown or DeflectStates.Deflecting) EnterDeflectReady();
     }
 #endregion
 
@@ -195,7 +195,7 @@ public partial class Shark : Node2D
             case DeflectStates.OnCooldown:
                 CurrentDeflectStateTimer -= delta;
                 bool IsDeflectReady = CurrentDeflectStateTimer <= 0;
-                if (IsDeflectReady) DeflectState = DeflectStates.DeflectReady;
+                if (IsDeflectReady) EnterDeflectReady();
                 break;
         }
     }
@@ -212,6 +212,15 @@ public partial class Shark : Node2D
         SharkBlob.SetBlobState(BlobStates.Normal);
         CurrentDeflectStateTimer = GameConfig.Shark.DefendCooldownSeconds;
         DeflectState = DeflectStates.OnCooldown;
+    }
+
+    private void EnterDeflectReady()
+    {
+        if (DeflectState is DeflectStates.Deflecting && LungeState is not LungeStates.Lunging)
+            SharkBlob.SetBlobState(BlobStates.Normal);
+
+        CurrentDeflectStateTimer = 0;
+        DeflectState = DeflectStates.DeflectReady;
     }
 
 #endregion

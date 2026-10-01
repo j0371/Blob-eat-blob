@@ -34,7 +34,7 @@ public partial class NonPlayer : Blob
         randomGrow.Randomize();
 
         Size = randomGrow.RandiRange(Math.Max(player.Size - GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer, 1), player.Size + GameConfig.NonPlayer.blobSpawnSizeRangeFromPlayer);
-        Scale = _baseScale * Size;
+        UpdateScale();
     }
 
     public override void _PhysicsProcess(double delta)

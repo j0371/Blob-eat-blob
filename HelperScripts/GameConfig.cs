@@ -6,7 +6,7 @@ public static class GameConfig
 {
     public static class Blob
     {
-        public const float Speed = 300.0f;
+        public const float Speed = 500.0f;
 
         public const float Acceleration = Speed * 10;
 
@@ -16,11 +16,13 @@ public static class GameConfig
 
         public const float SuppressedSpeedFactor = 1f / 6;
 
-        public const int StartingSize = 6;
+        public const int StartingSize = 10;
+
+        public const float BlobScaleFactor = 1f / 3;
 
         public const int SmallGrowAmount = 1;
 
-        public const int LargeGrowAmount = 2;
+        public const int LargeGrowAmount = 3;
     }
 
     public static class NonPlayer
@@ -34,7 +36,9 @@ public static class GameConfig
 
     public static class Shark
     {
-        public const int AttackCooldownSeconds = 10;
+        public const int AttackCooldownSeconds = 5;
+
+        public const int DefendCooldownSeconds = 5;
 
         public const float LungeSpeedMultiplier = 3f;
 
@@ -44,9 +48,7 @@ public static class GameConfig
 
         public const double LungeRecoverySeconds = 1;
 
-        public const double DeflectWindowSeconds = 0.5;
-
-        public const int DefendCooldownSeconds = 10;
+        public const double DeflectWindowSeconds = 0.25;
     }
 
     public static class NonPlayerSpawner
@@ -69,5 +71,9 @@ public static class GameConfig
         public const string Attack = "attack";
 
         public const string Defend = "defend";
+
+        public const string Fullscreen = "fullscreen";
+
+        public const float fullscreenPressDelay = .2f;
     }
 }

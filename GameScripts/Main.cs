@@ -1,3 +1,4 @@
+using BlobEatBlob.HelperScripts;
 using Godot;
 
 namespace BlobEatBlob.Scripts;
@@ -13,6 +14,8 @@ public partial class Main : Node2D
 
     //Node Properties
 
+    private bool isFullscreen = true;
+
 
     //Other Properties
 
@@ -24,6 +27,20 @@ public partial class Main : Node2D
 
         _player.Eaten += OnPlayerEaten;
     }
+
+    public override void _Process(double delta)
+    {
+        base._Process(delta);
+
+        if (Input.IsActionJustPressed(GameConfig.InputActions.Fullscreen))
+        {
+            if (isFullscreen) DisplayServer.WindowSetMode(DisplayServer.WindowMode.Windowed);
+            else DisplayServer.WindowSetMode(DisplayServer.WindowMode.Fullscreen);
+
+            isFullscreen = !isFullscreen;
+        }
+    }
+
 
     private void OnPlayerEaten()
     {

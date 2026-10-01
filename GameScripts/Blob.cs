@@ -92,8 +92,8 @@ public partial class Blob : CharacterBody2D
 
         if (enemy.AfflictingState is AfflictingStates.Suppressing) Afflict(enemy);
 
-        if (Size > enemy.Size && enemy.BlobState is not (BlobStates.Protected or BlobStates.Shrouded)
-        || enemy.BlobState == BlobStates.Suppressed && AfflictingState is not AfflictingStates.Suppressing)
+        if(enemy.BlobState is not (BlobStates.Protected or BlobStates.Shrouded) &&
+        Size > enemy.Size || blobState is BlobStates.Protected)
             EatEnemy(enemy);
 
         if (BlobState is BlobStates.Protected)
@@ -125,7 +125,7 @@ public partial class Blob : CharacterBody2D
     protected void Grow(int growAmount)
     {
         Size += growAmount;
-        Scale = _baseScale * Size;
+        UpdateScale();
     }
 
     public void Suppress()
@@ -176,4 +176,6 @@ public partial class Blob : CharacterBody2D
     {
         AfflictingState = afflictingState;
     }
+
+    protected void UpdateScale() => Scale = _baseScale * Size * GameConfig.Blob.BlobScaleFactor;
 }

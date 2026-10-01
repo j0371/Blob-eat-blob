@@ -49,7 +49,7 @@ public partial class Player : Blob
         base._Ready();
 
         Size = GameConfig.Blob.StartingSize;
-        Scale = _baseScale * Size;
+        UpdateScale();
 
         RectangleShape2D activeSquare = (RectangleShape2D)ActiveBounds.Shape;
 
