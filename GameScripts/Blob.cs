@@ -20,6 +20,11 @@ public partial class Blob : CharacterBody2D
 
     private SceneTreeTimer suppressionTimer;
 
+    //1 = just suppressed, 0 = not suppressed
+    public double SuppressionRemainingFraction => BlobState is BlobStates.Suppressed && suppressionTimer is not null
+        ? suppressionTimer.TimeLeft / GameConfig.Blob.SuppressionSeconds
+        : 0;
+
     public event System.Action CollidedWhileProtected;
 
     public event System.Action<Blob> Afflicting;

@@ -3,6 +3,12 @@
 [ext_resource type="Script" uid="uid://cirgnboxfpbw2" path="res://GameScripts/Blob.cs" id="1_jp85t"]
 [ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_rq8tt"]
 [ext_resource type="Script" uid="uid://bpd2l4y4g4i6g" path="res://GameScripts/Shark.cs" id="3_rq8tt"]
+[ext_resource type="Texture2D" uid="uid://dcve6xsvknsqv" path="res://Assets/AI Generated/GreenCircle.png" id="4_green"]
+[ext_resource type="Texture2D" uid="uid://doh10xtcjow6v" path="res://Assets/AI Generated/YellowCircle.png" id="5_yellow"]
+[ext_resource type="Script" uid="uid://ba6u3s5h1v42t" path="res://GameScripts/BlobStateSprite.cs" id="6_state"]
+[ext_resource type="Script" uid="uid://bqom00etb0b7w" path="res://GameScripts/DeflectRing.cs" id="7_ring"]
+[ext_resource type="Script" uid="uid://mp52li5x43qp" path="res://GameScripts/BlobRing.cs" id="8_blobring"]
+[ext_resource type="Script" uid="uid://dw3jokdwmnklh" path="res://GameScripts/SuppressionArc.cs" id="9_suparc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
 radius = 2.009975
@@ -18,7 +24,11 @@ shape = SubResource("CircleShape2D_dewec")
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=2031984160]
 position = Vector2(-8.940697e-07, -9.536743e-07)
 scale = Vector2(0.018, 0.018)
-texture = ExtResource("2_rq8tt")
+texture = ExtResource("4_green")
+script = ExtResource("6_state")
+_normalTexture = ExtResource("4_green")
+_suppressedTexture = ExtResource("2_rq8tt")
+_protectedTexture = ExtResource("5_yellow")
 
 [node name="EnemyDetection" type="Area2D" parent="." unique_id=1099444505]
 scale = Vector2(5, 5)
@@ -28,3 +38,12 @@ shape = SubResource("CircleShape2D_dewec")
 
 [node name="Shark" type="Node2D" parent="." unique_id=776459442]
 script = ExtResource("3_rq8tt")
+
+[node name="DeflectRing" type="Node2D" parent="Shark"]
+script = ExtResource("7_ring")
+
+[node name="BlobRing" type="Node2D" parent="."]
+script = ExtResource("8_blobring")
+
+[node name="SuppressionArc" type="Node2D" parent="."]
+script = ExtResource("9_suparc")

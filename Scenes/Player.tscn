@@ -3,11 +3,12 @@
 [ext_resource type="Script" uid="uid://bbft6rppw75xb" path="res://GameScripts/Player.cs" id="1_kyqiw"]
 [ext_resource type="PackedScene" uid="uid://dwtcl205x3r0h" path="res://Scenes/Blob.tscn" id="1_rpqav"]
 [ext_resource type="Script" uid="uid://dyns8kwjf5438" path="res://Scenes/SquarePlayerCamera2d.cs" id="3_gntrk"]
+[ext_resource type="Script" uid="uid://dia2cslx6hsny" path="res://GameScripts/AimArrow.cs" id="4_arrow"]
 
 [sub_resource type="RectangleShape2D" id="RectangleShape2D_dx8hr"]
 size = Vector2(2000, 2000)
 
-[node name="Player" unique_id=1008369897 node_paths=PackedStringArray("Camera", "ActiveBounds") instance=ExtResource("1_rpqav")]
+[node name="Player" unique_id=1008369897 node_paths=PackedStringArray("Camera", "ActiveBounds") groups=["player"] instance=ExtResource("1_rpqav")]
 script = ExtResource("1_kyqiw")
 Camera = NodePath("SquarePlayerCamera2D")
 ActiveBounds = NodePath("NonPlayerActiveBoundsSquare/BoundsSquare")
@@ -19,3 +20,6 @@ script = ExtResource("3_gntrk")
 
 [node name="BoundsSquare" type="CollisionShape2D" parent="NonPlayerActiveBoundsSquare" index="0" unique_id=1931180464]
 shape = SubResource("RectangleShape2D_dx8hr")
+
+[node name="AimArrow" type="Node2D" parent="Shark" index="1"]
+script = ExtResource("4_arrow")

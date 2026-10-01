@@ -6,6 +6,7 @@
 [ext_resource type="Script" uid="uid://wlh0i1pwejex" path="res://GameScripts/NonPlayerSpawner.cs" id="5_pbw6q"]
 [ext_resource type="PackedScene" uid="uid://cacrd8pi1yh8s" path="res://Scenes/NonPlayer.tscn" id="5_v1gob"]
 [ext_resource type="Script" uid="uid://4dk2c404a4ar" path="res://GameScripts/LungeCooldownBar.cs" id="6_lcbar"]
+[ext_resource type="Script" uid="uid://brfby65qhj1iy" path="res://GameScripts/DeflectCooldownBar.cs" id="7_dcbar"]
 
 [node name="Main" type="Node2D" unique_id=1087271970 node_paths=PackedStringArray("_player")]
 script = ExtResource("1_kln2b")
@@ -34,5 +35,38 @@ offset_top = 20.0
 offset_right = 220.0
 offset_bottom = 40.0
 script = ExtResource("6_lcbar")
+
+[node name="LungeLabel" type="Label" parent="HUD"]
+offset_left = 230.0
+offset_top = 20.0
+offset_right = 300.0
+offset_bottom = 40.0
+text = "Lunge"
+vertical_alignment = 1
+
+[node name="DeflectCooldownBar" type="ProgressBar" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -220.0
+offset_top = 20.0
+offset_right = -20.0
+offset_bottom = 40.0
+grow_horizontal = 0
+fill_mode = 1
+script = ExtResource("7_dcbar")
+
+[node name="DeflectLabel" type="Label" parent="HUD"]
+anchors_preset = 1
+anchor_left = 1.0
+anchor_right = 1.0
+offset_left = -300.0
+offset_top = 20.0
+offset_right = -230.0
+offset_bottom = 40.0
+grow_horizontal = 0
+text = "Deflect"
+horizontal_alignment = 2
+vertical_alignment = 1
 
 [editable path="Player"]
