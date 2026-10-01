@@ -35,7 +35,7 @@ public partial class Blob : CharacterBody2D
 
     public int Size { get; protected set; }
 
-    public float Speed { get; private set; } = GameConfig.Blob.Speed;
+    public virtual float Speed { get; set; } = GameConfig.Blob.Speed;
 
     public float Radius => ((CircleShape2D) GetNode<CollisionShape2D>("PhysicalCollision").Shape).Radius * GlobalScale.X;
 
@@ -62,6 +62,10 @@ public partial class Blob : CharacterBody2D
     }
 
     public AfflictingStates AfflictingState { get; private set; } = AfflictingStates.Normal;
+
+    public virtual bool IsLungeUnlocked => true;
+
+    public virtual bool IsDeflectUnlocked => true;
 
 
     //Other Properties
@@ -93,7 +97,8 @@ public partial class Blob : CharacterBody2D
         if (enemy.AfflictingState is AfflictingStates.Suppressing) Afflict(enemy);
 
         if(enemy.BlobState is not (BlobStates.Protected or BlobStates.Shrouded) &&
-        Size > enemy.Size || blobState is BlobStates.Protected)
+        BlobState is not BlobStates.Suppressed &&
+        Size > enemy.Size || blobState is BlobStates.Protected || enemy.blobState is BlobStates.Suppressed)
             EatEnemy(enemy);
 
         if (BlobState is BlobStates.Protected)
@@ -122,7 +127,7 @@ public partial class Blob : CharacterBody2D
         enemy.Eaten?.Invoke();
     }
 
-    protected void Grow(int growAmount)
+    protected virtual void Grow(int growAmount)
     {
         Size += growAmount;
         UpdateScale();

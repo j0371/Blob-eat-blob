@@ -9,6 +9,8 @@ public partial class DeflectCooldownBar : ProgressBar
     //Node Properties
     private Player _player;
 
+    private Control _label;
+
     private readonly StyleBoxFlat _fillStyle = new() { BgColor = DeflectRing.DeflectColor };
 
 
@@ -16,6 +18,7 @@ public partial class DeflectCooldownBar : ProgressBar
     public override void _Ready()
     {
         _player = GetNode<Player>("../../Player");
+        _label = GetNode<Control>("../DeflectLabel");
 
         MaxValue = 1;
         Step = 0; //default step is 1, which would snap the bar to empty/full
@@ -27,8 +30,9 @@ public partial class DeflectCooldownBar : ProgressBar
     {
         Shark shark = IsInstanceValid(_player) ? _player.GetChildren().OfType<Shark>().FirstOrDefault() : null;
 
-        Visible = shark != null;
-        if (shark == null) return;
+        Visible = shark != null && _player.IsLungeUnlocked;
+        _label.Visible = Visible;
+        if (!Visible) return;
 
         Value = 1 - shark.DeflectCooldownRemainingFraction; //fills up as it recharges
     }

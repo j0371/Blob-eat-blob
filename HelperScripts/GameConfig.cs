@@ -32,6 +32,17 @@ public static class GameConfig
         private const int averageNonPlayerDirectionChangeSeconds = 5; //The average number of seconds it takes before a nonplayer blob changes directions (varies randomly)
 
         public static int DirectionChangeWeight => Engine.PhysicsTicksPerSecond * averageNonPlayerDirectionChangeSeconds;
+
+        public static float LevelOneSpeed => Blob.Speed * .75f;
+    }
+
+    public static class Player
+    {
+        public const int IncreasedSizeToLevelUp = 10;
+
+        public const int LungeUnlockLevel = 2;
+
+        public const int DeflectUnlockLevel = 4;
     }
 
     public static class Shark
@@ -53,7 +64,7 @@ public static class GameConfig
 
     public static class NonPlayerSpawner
     {
-        public const int MaxNonPlayerCount = 50;
+        public const int MaxNonPlayerCount = 200;
 
         public const float MarginMultiplier = 2f;
     }

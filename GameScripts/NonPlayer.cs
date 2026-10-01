@@ -13,6 +13,8 @@ public partial class NonPlayer : Blob
     //Node Properties
     private Vector2? _roamingDirection = null;
 
+    public override float Speed { get; set; } = GameConfig.NonPlayer.LevelOneSpeed;
+
     public bool IsPreSpawning { get; private set; }
 
 

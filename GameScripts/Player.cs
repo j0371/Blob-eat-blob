@@ -36,6 +36,17 @@ public partial class Player : Blob
     public override bool IsDefendPressed => Input.IsActionPressed(GameConfig.InputActions.Defend);
     public override Vector2 AimDirection => (GetGlobalMousePosition() - GlobalPosition).Normalized();
 
+    public int Level => (Size - GameConfig.Blob.StartingSize) / GameConfig.Player.IncreasedSizeToLevelUp + 1;
+
+    public override bool IsLungeUnlocked => Level >= GameConfig.Player.LungeUnlockLevel;
+
+    public override bool IsDeflectUnlocked => Level >= GameConfig.Player.DeflectUnlockLevel;
+
+    public float LevelProgress =>
+    (float)((Size - GameConfig.Blob.StartingSize) % GameConfig.Player.IncreasedSizeToLevelUp) / GameConfig.Player.IncreasedSizeToLevelUp;
+
+    public event System.Action<int> LeveledUp;
+
 
     //Other Properties
 
@@ -83,5 +94,13 @@ public partial class Player : Blob
         float rate = direction == Vector2.Zero ? GameConfig.Blob.Deceleration : GameConfig.Blob.Acceleration;
 
         Velocity = Velocity.MoveToward(direction * Speed, rate * (float)delta);
+    }
+
+    protected override void Grow(int growAmount)
+    {
+        int previousLevel = Level;
+        base.Grow(growAmount);
+
+        if (Level > previousLevel) LeveledUp?.Invoke(Level);
     }
 }

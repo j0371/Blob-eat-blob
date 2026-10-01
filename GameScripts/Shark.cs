@@ -47,7 +47,8 @@ public partial class Shark : Node2D
     //true when nothing is blocking a lunge charge from starting
     public bool CanStartLunge => LungeState is LungeStates.AttackReady
         && SharkBlob.BlobState != BlobStates.Suppressed
-        && DeflectState is not DeflectStates.Deflecting;
+        && DeflectState is not DeflectStates.Deflecting
+        && SharkBlob.IsLungeUnlocked;
 
     public bool IsDeflecting => DeflectState == DeflectStates.Deflecting;
 
@@ -126,7 +127,7 @@ public partial class Shark : Node2D
     {
         lungeHitEnemy = false;
         SharkBlob.SetBlobState(BlobStates.Protected);
-        SharkBlob.Velocity = SharkBlob.AimDirection * (GameConfig.Blob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
+        SharkBlob.Velocity = SharkBlob.AimDirection * (SharkBlob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
         SharkBlob.SetIsMovementLocked(true);
 
         double LungingTimer = Math.Min(CurrentLungeStateTimer, GameConfig.Shark.MaxChargeSeconds) * GameConfig.Shark.lungeSecondsPerChargeSecond;
@@ -182,7 +183,7 @@ public partial class Shark : Node2D
         {
             case DeflectStates.DeflectReady:
                 bool IsAttackActive = LungeState is LungeStates.Lunging or LungeStates.LungeRecovery;
-                bool IsValidDefense = SharkBlob.IsDefendPressed && SharkBlob.BlobState != BlobStates.Suppressed && !IsAttackActive;
+                bool IsValidDefense = SharkBlob.IsDefendPressed && SharkBlob.BlobState != BlobStates.Suppressed && !IsAttackActive && SharkBlob.IsDeflectUnlocked;
                 if (IsValidDefense) EnterDeflectingState();
                 break;
 

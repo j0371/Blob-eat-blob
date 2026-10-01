@@ -9,6 +9,8 @@ public partial class LungeCooldownBar : ProgressBar
     //Node Properties
     private Player _player;
 
+    private Control _label;
+
     private readonly StyleBoxFlat _chargeFillStyle = new() { BgColor = Colors.Orange };
 
 
@@ -16,6 +18,7 @@ public partial class LungeCooldownBar : ProgressBar
     public override void _Ready()
     {
         _player = GetNode<Player>("../../Player");
+        _label = GetNode<Control>("../LungeLabel");
 
         MaxValue = 1;
         Step = 0; //default step is 1, which would snap the bar to empty/full
@@ -26,7 +29,9 @@ public partial class LungeCooldownBar : ProgressBar
     {
         Shark shark = IsInstanceValid(_player) ? _player.GetChildren().OfType<Shark>().FirstOrDefault() : null;
 
-        Visible = shark != null;
+        Visible = shark != null && _player.IsLungeUnlocked;
+        _label.Visible = Visible;
+
         if (shark == null) return;
 
         if (shark.IsChargingLunge)
