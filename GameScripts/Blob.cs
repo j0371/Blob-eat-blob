@@ -26,6 +26,8 @@ public partial class Blob : CharacterBody2D
 
     public event System.Action<BlobStates> StateChanged;
 
+    public event System.Action Eaten;
+
     public int Size { get; protected set; }
 
     public float Speed { get; private set; } = GameConfig.Blob.Speed;
@@ -110,10 +112,9 @@ public partial class Blob : CharacterBody2D
 
     protected virtual void EatEnemy(Blob enemy)
     {
-        
-
         Grow(enemy.Size > this.Size ? BlobGrowAmount.Large.Size() : BlobGrowAmount.Small.Size());
         enemy.QueueFree();
+        enemy.Eaten?.Invoke();
     }
 
     protected void Grow(int growAmount)

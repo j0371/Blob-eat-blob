@@ -7,8 +7,9 @@
 [ext_resource type="PackedScene" uid="uid://cacrd8pi1yh8s" path="res://Scenes/NonPlayer.tscn" id="5_v1gob"]
 [ext_resource type="Script" uid="uid://4dk2c404a4ar" path="res://GameScripts/LungeCooldownBar.cs" id="6_lcbar"]
 
-[node name="Main" type="Node2D" unique_id=1087271970]
+[node name="Main" type="Node2D" unique_id=1087271970 node_paths=PackedStringArray("_player")]
 script = ExtResource("1_kln2b")
+_player = NodePath("Player")
 
 [node name="Sprite2D" type="Sprite2D" parent="." unique_id=1239749945]
 z_index = -1
