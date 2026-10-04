@@ -31,6 +31,8 @@ public partial class Shark : Node2D
 
     private Blob SharkBlob => GetParent<Blob>();
 
+    public bool IsLunging => LungeState == LungeStates.Lunging;
+
     //0 = attack ready, 1 = attack just used
     public double CooldownRemainingFraction => LungeState switch
     {
@@ -60,6 +62,10 @@ public partial class Shark : Node2D
         _ => 0
     };
 
+    private AudioStreamPlayer2D lungeSound;
+
+    private AudioStreamPlayer2D deflectSound;
+
 
     //Other Properties
 
@@ -70,6 +76,9 @@ public partial class Shark : Node2D
         if (!IsReady) return;
 
         SharkBlob.CollidedWhileProtected += OnBlobCollidedWhileProtected;
+
+        lungeSound = AddSound("res://Assets/Sounds/LungeRush.wav", -10);
+        deflectSound = AddSound("res://Assets/Sounds/DeflectTinkShort.wav", -6);
     }
 
     public override void _PhysicsProcess(double delta)
@@ -79,7 +88,14 @@ public partial class Shark : Node2D
         ManageAfflictingState();
     }
 
-#region Attack state management methods
+    private AudioStreamPlayer2D AddSound(string path, float volumeDb)
+    {
+        AudioStreamPlayer2D sound = new() { Stream = GD.Load<AudioStream>(path), VolumeDb = volumeDb };
+        AddChild(sound);
+        return sound;
+    }
+
+    #region Attack state management methods
 
     private void ManageAttackState(double delta)
     {
@@ -125,6 +141,7 @@ public partial class Shark : Node2D
 
     private void EnterLungingState()
     {
+        if(IsInstanceValid(SharkBlob) && SharkBlob is Player) lungeSound.Play();
         lungeHitEnemy = false;
         SharkBlob.SetBlobState(BlobStates.Protected);
         SharkBlob.Velocity = SharkBlob.AimDirection * (SharkBlob.Speed * GameConfig.Shark.LungeSpeedMultiplier);
@@ -136,6 +153,7 @@ public partial class Shark : Node2D
 
     private void OnLungeEnded()
     {
+        if (IsInstanceValid(SharkBlob) && SharkBlob is Player) lungeSound.Stop();
         if (lungeHitEnemy) RefreshLungeAbility();
         else EnterLungeRecoveryState();
     }
@@ -170,6 +188,8 @@ public partial class Shark : Node2D
     {
         if (LungeState is LungeStates.Lunging) lungeHitEnemy = true;
         else if (LungeState is LungeStates.LungeRecovery or LungeStates.OnCooldown) RefreshLungeAbility();
+
+        if (DeflectState is DeflectStates.Deflecting && IsInstanceValid(SharkBlob) && SharkBlob is Player) deflectSound.Play();
 
         if (DeflectState is DeflectStates.OnCooldown or DeflectStates.Deflecting) EnterDeflectReady();
     }

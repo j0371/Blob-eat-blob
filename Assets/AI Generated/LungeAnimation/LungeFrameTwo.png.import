@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://cdc2pyo5l47m7"
-path="res://.godot/imported/AiRedCircle.png-d5b14e3d142940348a4aa65729df92c1.ctex"
+uid="uid://drcjx3urp6y2h"
+path="res://.godot/imported/LungeFrameTwo.png-2db166d3a492a921c7981b67c2aced8c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/AI Generated/AiRedCircle.png"
-dest_files=["res://.godot/imported/AiRedCircle.png-d5b14e3d142940348a4aa65729df92c1.ctex"]
+source_file="res://Assets/AI Generated/LungeAnimation/LungeFrameTwo.png"
+dest_files=["res://.godot/imported/LungeFrameTwo.png-2db166d3a492a921c7981b67c2aced8c.ctex"]
 
 [params]
 

@@ -1,13 +1,14 @@
 [gd_scene format=3 uid="uid://dwtcl205x3r0h"]
 
 [ext_resource type="Script" uid="uid://cirgnboxfpbw2" path="res://GameScripts/Blob.cs" id="1_jp85t"]
-[ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/AiRedCircle.png" id="2_rq8tt"]
+[ext_resource type="Texture2D" uid="uid://cdc2pyo5l47m7" path="res://Assets/AI Generated/BlobStatus/AiRedCircle.png" id="2_rq8tt"]
 [ext_resource type="Script" uid="uid://bpd2l4y4g4i6g" path="res://GameScripts/Shark.cs" id="3_rq8tt"]
-[ext_resource type="Texture2D" uid="uid://dcve6xsvknsqv" path="res://Assets/AI Generated/GreenCircle.png" id="4_green"]
-[ext_resource type="Texture2D" uid="uid://doh10xtcjow6v" path="res://Assets/AI Generated/YellowCircle.png" id="5_yellow"]
+[ext_resource type="Texture2D" uid="uid://dcve6xsvknsqv" path="res://Assets/AI Generated/BlobStatus/GreenCircle.png" id="4_green"]
+[ext_resource type="Texture2D" uid="uid://doh10xtcjow6v" path="res://Assets/AI Generated/BlobStatus/YellowCircle.png" id="5_yellow"]
 [ext_resource type="Script" uid="uid://ba6u3s5h1v42t" path="res://GameScripts/BlobStateSprite.cs" id="6_state"]
 [ext_resource type="Script" uid="uid://bqom00etb0b7w" path="res://GameScripts/DeflectRing.cs" id="7_ring"]
 [ext_resource type="Script" uid="uid://mp52li5x43qp" path="res://GameScripts/BlobRing.cs" id="8_blobring"]
+[ext_resource type="Script" uid="uid://dxhm3dh0t45l6" path="res://GameScripts/LungeSwirl.cs" id="8_rgwsm"]
 [ext_resource type="Script" uid="uid://dw3jokdwmnklh" path="res://GameScripts/SuppressionArc.cs" id="9_suparc"]
 
 [sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
@@ -41,6 +42,9 @@ script = ExtResource("3_rq8tt")
 
 [node name="DeflectRing" type="Node2D" parent="Shark" unique_id=694357242]
 script = ExtResource("7_ring")
+
+[node name="LungeSwirl" type="AnimatedSprite2D" parent="Shark" unique_id=1277118096]
+script = ExtResource("8_rgwsm")
 
 [node name="BlobRing" type="Node2D" parent="." unique_id=1240615787]
 script = ExtResource("8_blobring")

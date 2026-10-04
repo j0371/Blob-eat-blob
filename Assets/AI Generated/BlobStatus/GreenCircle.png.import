@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://doh10xtcjow6v"
-path="res://.godot/imported/YellowCircle.png-e00e1280cd4072ee78e625cfa7bb76b9.ctex"
+uid="uid://dcve6xsvknsqv"
+path="res://.godot/imported/GreenCircle.png-3f6cb62ffafc16287bf786a1952b69dc.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/AI Generated/YellowCircle.png"
-dest_files=["res://.godot/imported/YellowCircle.png-e00e1280cd4072ee78e625cfa7bb76b9.ctex"]
+source_file="res://Assets/AI Generated/BlobStatus/GreenCircle.png"
+dest_files=["res://.godot/imported/GreenCircle.png-3f6cb62ffafc16287bf786a1952b69dc.ctex"]
 
 [params]
 
