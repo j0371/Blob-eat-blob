@@ -33,17 +33,17 @@ _protectedTexture = ExtResource("5_yellow")
 [node name="EnemyDetection" type="Area2D" parent="." unique_id=1099444505]
 scale = Vector2(5, 5)
 
-[node name="DetectionRectangle" type="CollisionShape2D" parent="EnemyDetection" unique_id=193483932]
+[node name="DetectionCircle" type="CollisionShape2D" parent="EnemyDetection" unique_id=193483932]
 shape = SubResource("CircleShape2D_dewec")
 
 [node name="Shark" type="Node2D" parent="." unique_id=776459442]
 script = ExtResource("3_rq8tt")
 
-[node name="DeflectRing" type="Node2D" parent="Shark"]
+[node name="DeflectRing" type="Node2D" parent="Shark" unique_id=694357242]
 script = ExtResource("7_ring")
 
-[node name="BlobRing" type="Node2D" parent="."]
+[node name="BlobRing" type="Node2D" parent="." unique_id=1240615787]
 script = ExtResource("8_blobring")
 
-[node name="SuppressionArc" type="Node2D" parent="."]
+[node name="SuppressionArc" type="Node2D" parent="." unique_id=901939448]
 script = ExtResource("9_suparc")

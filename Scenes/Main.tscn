@@ -9,6 +9,9 @@
 [ext_resource type="Script" uid="uid://brfby65qhj1iy" path="res://GameScripts/DeflectCooldownBar.cs" id="7_dcbar"]
 [ext_resource type="Script" uid="uid://brjwrv40bkdwb" path="res://Scenes/SizeToNextLevel.cs" id="8_50glp"]
 
+[sub_resource type="CircleShape2D" id="CircleShape2D_dewec"]
+radius = 2.009975
+
 [node name="Main" type="Node2D" unique_id=1087271970 node_paths=PackedStringArray("_player")]
 script = ExtResource("1_kln2b")
 _player = NodePath("Player")
@@ -19,6 +22,9 @@ position = Vector2(-3, 26)
 texture = ExtResource("3_kln2b")
 
 [node name="Player" parent="." unique_id=1008369897 instance=ExtResource("2_idj7w")]
+
+[node name="DetectionRectangle" parent="Player/EnemyDetection" parent_id_path=PackedInt32Array(1008369897, 1099444505) index="0" unique_id=193483932]
+shape = SubResource("CircleShape2D_dewec")
 
 [node name="BoundsSquare" parent="Player/NonPlayerActiveBoundsSquare" parent_id_path=PackedInt32Array(1008369897, 1078959630) index="0" unique_id=1931180464]
 position = Vector2(15, -80)

@@ -33,7 +33,15 @@ public static class GameConfig
 
         public static int DirectionChangeWeight => Engine.PhysicsTicksPerSecond * averageNonPlayerDirectionChangeSeconds;
 
-        public static float LevelOneSpeed => Blob.Speed * .75f;
+        public static float LevelOneSpeed => Blob.Speed * .6f;
+
+        public const float DeflectChance = 0.8f;
+
+        public const double DeflectPressSeconds = 0.1; //how long the NPC "holds" defend after detecting an enemy
+
+        public const int LungeUnlockLevel = 3;
+
+        public const int DeflectUnlockLevel = 3;
     }
 
     public static class Player
@@ -42,7 +50,9 @@ public static class GameConfig
 
         public const int LungeUnlockLevel = 2;
 
-        public const int DeflectUnlockLevel = 4;
+        public const int DeflectUnlockLevel = 2;
+
+        public const int StartingLevel = 3;
     }
 
     public static class Shark

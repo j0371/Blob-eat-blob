@@ -35,7 +35,9 @@ public partial class Blob : CharacterBody2D
 
     public int Size { get; protected set; }
 
-    public virtual float Speed { get; set; } = GameConfig.Blob.Speed;
+    protected virtual float BaseSpeed => GameConfig.Blob.Speed;
+
+    public float Speed => BlobState is BlobStates.Suppressed ? BaseSpeed * GameConfig.Blob.SuppressedSpeedFactor : BaseSpeed;
 
     public float Radius => ((CircleShape2D) GetNode<CollisionShape2D>("PhysicalCollision").Shape).Radius * GlobalScale.X;
 
@@ -47,6 +49,8 @@ public partial class Blob : CharacterBody2D
     public bool IsMovementLocked { get; private set; } = false;
 
     private BlobStates blobState = BlobStates.Normal;
+
+    public bool IsDeflecting => GetNodeOrNull<GameScripts.Shark>("Shark")?.IsDeflecting ?? false;
 
     //Every blob state change goes through here, so StateChanged is the one place to react to it
     public BlobStates BlobState
@@ -63,9 +67,9 @@ public partial class Blob : CharacterBody2D
 
     public AfflictingStates AfflictingState { get; private set; } = AfflictingStates.Normal;
 
-    public virtual bool IsLungeUnlocked => true;
+    public virtual bool IsLungeUnlocked => false;
 
-    public virtual bool IsDeflectUnlocked => true;
+    public virtual bool IsDeflectUnlocked => false;
 
 
     //Other Properties
@@ -80,7 +84,6 @@ public partial class Blob : CharacterBody2D
 
         _detectionArea.BodyEntered += OnEnemyCollide;
         Afflicting += OnAfflicted;
-        StateChanged += OnStateChanged;
     }
 
     public override void _PhysicsProcess(double delta)
@@ -115,7 +118,7 @@ public partial class Blob : CharacterBody2D
 
     protected virtual void OnAfflicted(Blob afflicter)
     {
-        if (BlobState is BlobStates.Protected) return;
+        if (BlobState is BlobStates.Protected && !afflicter.IsDeflecting) return;
 
         Suppress();
     }
@@ -158,13 +161,6 @@ public partial class Blob : CharacterBody2D
     {
         CancelSuppressionTimer();
         if (BlobState is BlobStates.Suppressed) BlobState = BlobStates.Normal;
-    }
-
-    private void OnStateChanged(BlobStates newState)
-    {
-        Speed = newState is BlobStates.Suppressed
-            ? GameConfig.Blob.Speed * GameConfig.Blob.SuppressedSpeedFactor
-            : GameConfig.Blob.Speed;
     }
 
     public void SetBlobState(BlobStates blobstate)

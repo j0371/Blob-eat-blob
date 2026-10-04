@@ -36,7 +36,7 @@ public partial class Player : Blob
     public override bool IsDefendPressed => Input.IsActionPressed(GameConfig.InputActions.Defend);
     public override Vector2 AimDirection => (GetGlobalMousePosition() - GlobalPosition).Normalized();
 
-    public int Level => (Size - GameConfig.Blob.StartingSize) / GameConfig.Player.IncreasedSizeToLevelUp + 1;
+    public int Level => (Size - GameConfig.Blob.StartingSize) / GameConfig.Player.IncreasedSizeToLevelUp + GameConfig.Player.StartingLevel;
 
     public override bool IsLungeUnlocked => Level >= GameConfig.Player.LungeUnlockLevel;
 

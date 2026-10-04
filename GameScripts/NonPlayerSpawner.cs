@@ -69,7 +69,7 @@ public partial class NonPlayerSpawner : Node2D
         spawningNonPlayer.SetIsPreSpawning(false);
 
         AddChild(spawningNonPlayer);
-        spawningNonPlayer.SetInitialSize(_player);
+        spawningNonPlayer.SetInitialValues(_player);
     }
 
     private void FreeOutOfBoundNonplayers()

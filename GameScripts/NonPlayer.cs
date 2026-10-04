@@ -13,9 +13,19 @@ public partial class NonPlayer : Blob
     //Node Properties
     private Vector2? _roamingDirection = null;
 
-    public override float Speed { get; set; } = GameConfig.NonPlayer.LevelOneSpeed;
+    private Player _player;
 
     public bool IsPreSpawning { get; private set; }
+
+    public override bool IsLungeUnlocked => _player.Level >= GameConfig.NonPlayer.LungeUnlockLevel;
+
+    public override bool IsDeflectUnlocked => _player.Level >= GameConfig.NonPlayer.DeflectUnlockLevel;
+
+    protected override float BaseSpeed => IsInstanceValid(_player) && _player.Level == 1 ? GameConfig.NonPlayer.LevelOneSpeed : GameConfig.Blob.Speed;
+
+    private double _defendPressSecondsLeft;
+
+    public override bool IsDefendPressed => _defendPressSecondsLeft > 0;
 
 
     //Other Properties
@@ -28,10 +38,15 @@ public partial class NonPlayer : Blob
 
         base._Ready();
 
+        GetNode<Area2D>("DeflectDetection").BodyEntered += OnDeflectDetected;
+
     }
 
-    public void SetInitialSize(Player player)
+    public void SetInitialValues(Player player)
     {
+
+        _player = player;
+
         RandomNumberGenerator randomGrow = new();
         randomGrow.Randomize();
 
@@ -49,6 +64,8 @@ public partial class NonPlayer : Blob
             Velocity = roamingDirection * Speed;
 
         MoveAndSlide();
+
+        _defendPressSecondsLeft -= delta;
     }
 
     private void Move()
@@ -74,5 +91,13 @@ public partial class NonPlayer : Blob
         SetProcess(isPreSpawning);
 
         return IsPreSpawning;
+    }
+
+    private void OnDeflectDetected(Node2D body)
+    {
+        if (body == this || body is not Blob) return;
+
+        if (randomRoamingGenerator.Randf() < GameConfig.NonPlayer.DeflectChance)
+            _defendPressSecondsLeft = GameConfig.NonPlayer.DeflectPressSeconds;
     }
 }
