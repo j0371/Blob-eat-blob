@@ -58,10 +58,13 @@ public partial class NonPlayer : Blob
     {
         base._PhysicsProcess(delta);
 
-        Move();
+        if (!IsKnockedBack)
+        {
+            Move();
 
-        if (_roamingDirection is Vector2 roamingDirection)
-            Velocity = roamingDirection * Speed;
+            if (_roamingDirection is Vector2 roamingDirection)
+                Velocity = roamingDirection * Speed;
+        }
 
         MoveAndSlide();
 

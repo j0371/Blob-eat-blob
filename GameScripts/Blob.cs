@@ -67,6 +67,10 @@ public partial class Blob : CharacterBody2D
 
     public AfflictingStates AfflictingState { get; private set; } = AfflictingStates.Normal;
 
+    private double knockbackSecondsLeft;
+
+    public bool IsKnockedBack => knockbackSecondsLeft > 0;
+
     public virtual bool IsLungeUnlocked => false;
 
     public virtual bool IsDeflectUnlocked => false;
@@ -88,7 +92,13 @@ public partial class Blob : CharacterBody2D
 
     public override void _PhysicsProcess(double delta)
 	{
-        
+        knockbackSecondsLeft -= delta;
+    }
+
+    public void KnockBackFrom(Blob source)
+    {
+        Velocity = (GlobalPosition - source.GlobalPosition).Normalized() * GameConfig.Shark.DeflectPushbackSpeed;
+        knockbackSecondsLeft = GameConfig.Shark.DeflectPushbackSeconds;
     }
 
     private void OnEnemyCollide(Node2D body)
@@ -96,6 +106,15 @@ public partial class Blob : CharacterBody2D
         if (body == this || body is not Blob) return;
 
         Blob enemy = (Blob) body;
+
+        //a deflect is purely defensive: suppress and push the enemy away, never eat it
+        if (IsDeflecting)
+        {
+            enemy.Suppress();
+            enemy.KnockBackFrom(this);
+            CollidedWhileProtected?.Invoke();
+            return;
+        }
 
         if (enemy.AfflictingState is AfflictingStates.Suppressing) Afflict(enemy);
 

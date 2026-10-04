@@ -83,7 +83,7 @@ public partial class Player : Blob
 
     private void Move(double delta)
     {
-        if (IsMovementLocked) return;
+        if (IsMovementLocked || IsKnockedBack) return;
 
         Vector2 direction = Input.GetVector(
             Direction.Left.Input(),

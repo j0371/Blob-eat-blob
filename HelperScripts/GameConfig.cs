@@ -6,7 +6,7 @@ public static class GameConfig
 {
     public static class Blob
     {
-        public const float Speed = 500.0f;
+        public const float Speed = 400.0f;
 
         public const float Acceleration = Speed * 10;
 
@@ -37,7 +37,7 @@ public static class GameConfig
 
         public const float DeflectChance = 0.8f;
 
-        public const double DeflectPressSeconds = 0.1; //how long the NPC "holds" defend after detecting an enemy
+        public const double DeflectPressSeconds = 0.1;
 
         public const int LungeUnlockLevel = 3;
 
@@ -52,7 +52,7 @@ public static class GameConfig
 
         public const int DeflectUnlockLevel = 2;
 
-        public const int StartingLevel = 3;
+        public const int StartingLevel = 1;
     }
 
     public static class Shark
@@ -70,6 +70,10 @@ public static class GameConfig
         public const double LungeRecoverySeconds = 1;
 
         public const double DeflectWindowSeconds = 0.25;
+
+        public const float DeflectPushbackSpeed = Blob.Speed * 3;
+
+        public const double DeflectPushbackSeconds = 0.2;
     }
 
     public static class NonPlayerSpawner
