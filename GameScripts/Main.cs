@@ -1,3 +1,4 @@
+using BlobEatBlob.GameScripts;
 using BlobEatBlob.HelperScripts;
 using Godot;
 
@@ -26,6 +27,9 @@ public partial class Main : Node2D
         if (!IsReady) return;
 
         _player.Eaten += OnPlayerEaten;
+        _player.LeveledUp += ShowLevelTutorial;
+
+        ShowLevelTutorial(_player.Level); //the starting level's tutorial on first launch (already-shown ones are skipped after respawns)
     }
 
     public override void _Process(double delta)
@@ -45,5 +49,11 @@ public partial class Main : Node2D
     private void OnPlayerEaten()
     {
         GetTree().CallDeferred(SceneTree.MethodName.ReloadCurrentScene);
+    }
+
+    private void ShowLevelTutorial(int level)
+    {
+        if (GameConfig.Tutorials.ByLevel.TryGetValue(level, out string text))
+            TutorialModal.ShowOnce(this, $"level{level}", text);
     }
 }

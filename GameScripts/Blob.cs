@@ -160,7 +160,7 @@ public partial class Blob : CharacterBody2D
         BlobState = BlobStates.Suppressed;
 
         CancelSuppressionTimer();
-        suppressionTimer = GetTree().CreateTimer(GameConfig.Blob.SuppressionSeconds);
+        suppressionTimer = GetTree().CreateTimer(GameConfig.Blob.SuppressionSeconds, processAlways: false); //pauses with the game (e.g. behind a tutorial modal)
         suppressionTimer.Timeout += OnSuppressionEnded;
     }
 

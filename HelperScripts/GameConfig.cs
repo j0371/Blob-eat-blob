@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Godot;
 
 namespace BlobEatBlob.HelperScripts;
@@ -100,5 +101,22 @@ public static class GameConfig
         public const string Fullscreen = "fullscreen";
 
         public const float fullscreenPressDelay = .2f;
+    }
+
+    public static class Tutorials
+    {
+        //level -> tutorial shown when the player reaches that level (level 1 is shown on first start)
+        public static readonly Dictionary<int, string> ByLevel = new()
+        {
+            [1] = """
+                Level 1 tutorial placeholder.
+                """,
+            [2] = """
+                Level 2 tutorial placeholder.
+                """,
+            [3] = """
+                Level 3 tutorial placeholder.
+                """,
+        };
     }
 }

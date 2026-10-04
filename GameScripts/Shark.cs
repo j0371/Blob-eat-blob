@@ -109,7 +109,7 @@ public partial class Shark : Node2D
 
         if (onTimeout is null) return;
 
-        SceneTreeTimer timer = GetTree().CreateTimer(seconds);
+        SceneTreeTimer timer = GetTree().CreateTimer(seconds, processAlways: false); //pauses with the game (e.g. behind a tutorial modal)
         lungeTimer = timer;
         timer.Timeout += () =>
         {
