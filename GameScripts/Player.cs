@@ -9,6 +9,9 @@ namespace BlobEatBlob.Scripts;
 
 public partial class Player : Blob
 {
+
+    private static int respawnLevel = GameConfig.Player.StartingLevel;
+
     //Necessary Godot Game Properties
     [Export]
     public SquarePlayerCamera2d Camera { get; private set; }
@@ -47,6 +50,13 @@ public partial class Player : Blob
 
     public event System.Action<int> LeveledUp;
 
+    public int LevelStartSize => GameConfig.Blob.StartingSize + (Level - GameConfig.Player.StartingLevel) * GameConfig.Player.IncreasedSizeToLevelUp;
+
+    //how far the camera has zoomed out; world speeds are multiplied by this so on-screen speed stays the same
+    public float LevelScaleFactor => (float)LevelStartSize / GameConfig.Blob.StartingSize;
+
+    protected override float BaseSpeed => GameConfig.Blob.Speed * LevelScaleFactor;
+
 
     //Other Properties
 
@@ -59,7 +69,11 @@ public partial class Player : Blob
 
         base._Ready();
 
-        Size = GameConfig.Blob.StartingSize;
+        //start at 0 progress of the level the player died at
+        Size = GameConfig.Blob.StartingSize + (respawnLevel - GameConfig.Player.StartingLevel) * GameConfig.Player.IncreasedSizeToLevelUp;
+
+        Eaten += OnEaten;
+
         UpdateScale();
 
         RectangleShape2D activeSquare = (RectangleShape2D)ActiveBounds.Shape;
@@ -68,7 +82,10 @@ public partial class Player : Blob
         {
             activeSquare.Size = Vector2.One * Mathf.Max(activeSquare.Size.X, activeSquare.Size.Y);
         }
-	}
+
+        Camera.NormalizeZoom(LevelStartSize);
+        LeveledUp += NormalizeCameraZoom;
+    }
 
     public override void _PhysicsProcess(double delta)
     {
@@ -91,7 +108,7 @@ public partial class Player : Blob
             Direction.Up.Input(),
             Direction.Down.Input());
 
-        float rate = direction == Vector2.Zero ? GameConfig.Blob.Deceleration : GameConfig.Blob.Acceleration;
+        float rate = (direction == Vector2.Zero ? GameConfig.Blob.Deceleration : GameConfig.Blob.Acceleration) * LevelScaleFactor;
 
         Velocity = Velocity.MoveToward(direction * Speed, rate * (float)delta);
     }
@@ -102,5 +119,15 @@ public partial class Player : Blob
         base.Grow(growAmount);
 
         if (Level > previousLevel) LeveledUp?.Invoke(Level);
+    }
+
+    private void OnEaten()
+    {
+        respawnLevel = Level;
+    }
+
+    private void NormalizeCameraZoom(int _)
+    {
+        Camera.NormalizeZoom(LevelStartSize);
     }
 }

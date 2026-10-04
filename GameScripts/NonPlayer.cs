@@ -21,7 +21,9 @@ public partial class NonPlayer : Blob
 
     public override bool IsDeflectUnlocked => _player.Level >= GameConfig.NonPlayer.DeflectUnlockLevel;
 
-    protected override float BaseSpeed => IsInstanceValid(_player) && _player.Level == 1 ? GameConfig.NonPlayer.LevelOneSpeed : GameConfig.Blob.Speed;
+    protected override float BaseSpeed => !IsInstanceValid(_player)
+    ? GameConfig.Blob.Speed
+    : (_player.Level == 1 ? GameConfig.NonPlayer.LevelOneSpeed : GameConfig.Blob.Speed) * _player.LevelScaleFactor;
 
     private double _defendPressSecondsLeft;
 

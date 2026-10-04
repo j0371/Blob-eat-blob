@@ -18,7 +18,7 @@ public static class GameConfig
 
         public const int StartingSize = 10;
 
-        public const float BlobScaleFactor = 1f / 3;
+        public const float BlobScaleFactor = 0.5f;
 
         public const int SmallGrowAmount = 1;
 
@@ -46,13 +46,13 @@ public static class GameConfig
 
     public static class Player
     {
-        public const int IncreasedSizeToLevelUp = 10;
+        public const int IncreasedSizeToLevelUp = 15;
 
         public const int LungeUnlockLevel = 2;
 
         public const int DeflectUnlockLevel = 2;
 
-        public const int StartingLevel = 1;
+        public const int StartingLevel = 1; //If StartingLevel > 1, this is a debug cheat for playtesting
     }
 
     public static class Shark

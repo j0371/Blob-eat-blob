@@ -1,3 +1,4 @@
+using BlobEatBlob.HelperScripts;
 using BlobEatBlob.HelperScripts.ErrorCheckAndHandle;
 using Godot;
 
@@ -21,6 +22,7 @@ public partial class SquarePlayerCamera2d : Camera2D
 		}
 	}
 
+	private Vector2 _baseZoom;
 
 	//Other Properties
 
@@ -34,5 +36,14 @@ public partial class SquarePlayerCamera2d : Camera2D
 		{
 			Zoom = Vector2.One * Zoom.X;
 		}
+
+		_baseZoom = Zoom;
+	}
+
+	public void NormalizeZoom(int levelStartSize)
+	{
+		Vector2 targetZoom = _baseZoom * GameConfig.Blob.StartingSize / levelStartSize;
+
+		CreateTween().TweenProperty(this, "zoom", targetZoom, 0.5);
 	}
 }
