@@ -53,7 +53,14 @@ public partial class TutorialModal : CanvasLayer
             AutowrapMode = TextServer.AutowrapMode.WordSmart,
             CustomMinimumSize = new Vector2(500, 0) //wrap width
         };
-        content.AddChild(text);
+        //long text scrolls inside a capped height instead of pushing the Start button off screen
+        ScrollContainer scroll = new()
+        {
+            HorizontalScrollMode = ScrollContainer.ScrollMode.Disabled,
+            CustomMinimumSize = new Vector2(0, GetViewport().GetVisibleRect().Size.Y * 0.6f) //60% of the screen height
+        };
+        scroll.AddChild(text);
+        content.AddChild(scroll);
 
         Button startButton = new() { Text = "Start" };
         startButton.Pressed += Close;

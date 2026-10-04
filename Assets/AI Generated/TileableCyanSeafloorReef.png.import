@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://ck07qv253nd40"
-path="res://.godot/imported/BackgroundPlaceholder.png-eb0466bf455eb126ab8a699eea543e78.ctex"
+uid="uid://djx1axw80epsa"
+path="res://.godot/imported/TileableCyanSeafloorReef.png-7d45f7ea23ae888c640f30fe849ff90c.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://Assets/Placeholders/BackgroundPlaceholder.png"
-dest_files=["res://.godot/imported/BackgroundPlaceholder.png-eb0466bf455eb126ab8a699eea543e78.ctex"]
+source_file="res://Assets/AI Generated/TileableCyanSeafloorReef.png"
+dest_files=["res://.godot/imported/TileableCyanSeafloorReef.png-7d45f7ea23ae888c640f30fe849ff90c.ctex"]
 
 [params]
 

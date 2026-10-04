@@ -109,13 +109,69 @@ public static class GameConfig
         public static readonly Dictionary<int, string> ByLevel = new()
         {
             [1] = """
-                Level 1 tutorial placeholder.
+                Welcome to Blob Eat Blob!
+
+                In this game, you will play as a blob in an ocean of other
+                blobs. The basic objective of this game is to eat smaller
+                blobs, and avoid being eaten by bigger blobs.
+
+                ->  You play as the blob in the middle of the screen
+                    that has a blue ring around it.
+
+                ->  Bigger blobs have a yellow ring around them, you will be
+                    eaten if you collide with them.
+
+                ->  Smaller blobs have a red ring around them, you can eat them
+                    by moving towards them and colliding with them which will
+                    increase your size and you will gain progress towards your
+                    "Shark Level".
+
+                ->  Your Shark Level is determined by how big you are, and will
+                    unlock additional gameplay elements for levels 2 and 3.
+                    Being eaten will reset your progress on your next Shark Level.
+
+                ->  Basic Controls: WASD will move your blob through the
+                ocean environment. Pressing Escape will toggle fullscreen mode.
+                
                 """,
             [2] = """
-                Level 2 tutorial placeholder.
+                You have gained Shark Abilities! and enemy blobs move faster.
+
+                ->  There are two statuses that shark abilites can apply
+                    or inflict to you and other blobs. Protected, and suppressed.
+
+                ->  When protected, blobs cannot be eaten by larger blobs.
+                    blobs that are protected will appear yellow.
+
+                ->  When suppressed, blobs can be eaten by smaller blobs.
+                    Blobs that are suppressed will appear red.
+
+                ->  You can now lunge. You will lunge towards your mouse
+                    pointer when you activate lunge. You press and hold
+                    your left mouse button to charge your lunge, and
+                    it will activate when released or when fully charged.
+                    on a failed lunge, you will be suppressed for a short time.
+
+                ->  You can now deflect. When you press the right mouse button,
+                    you will be protected for a short duration, and will
+                    pushback any blob that you collide with.
+
+                ->  During a lunge or deflect, you will be protected and,
+                    cause any blob you collide with to be suppressed.
+
+                ->  Each ability has a moderate cooldown that is displayed,
+                    at the top of the screen. Eating another blob will instantly
+                    finish the cooldown on your abilities, allowing them to be used again.
                 """,
             [3] = """
-                Level 3 tutorial placeholder.
+                You are now level three, and have grown large enough to encounter enemy sharks.
+
+                ->  Enemy sharks have the deflect ability. A successful deflect will counter your attacks.
+
+                ->  You can continue to grow, and increase your shark level indefinitely, but there won't
+                    Be anymore abilities to earn or new blob types to encounter.
+
+                Good luck against the other sharks!
                 """,
         };
     }

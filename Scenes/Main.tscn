@@ -1,8 +1,8 @@
 [gd_scene format=3 uid="uid://cftg6nq4k4aed"]
 
 [ext_resource type="Script" uid="uid://ehd0nievwsm2" path="res://GameScripts/Main.cs" id="1_kln2b"]
+[ext_resource type="Texture2D" uid="uid://djx1axw80epsa" path="res://Assets/AI Generated/TileableCyanSeafloorReef.png" id="2_50glp"]
 [ext_resource type="PackedScene" uid="uid://cikxtn6t3d56h" path="res://Scenes/Player.tscn" id="2_idj7w"]
-[ext_resource type="Texture2D" uid="uid://ck07qv253nd40" path="res://Assets/Placeholders/BackgroundPlaceholder.png" id="3_kln2b"]
 [ext_resource type="Script" uid="uid://wlh0i1pwejex" path="res://GameScripts/NonPlayerSpawner.cs" id="5_pbw6q"]
 [ext_resource type="PackedScene" uid="uid://cacrd8pi1yh8s" path="res://Scenes/NonPlayer.tscn" id="5_v1gob"]
 [ext_resource type="Script" uid="uid://4dk2c404a4ar" path="res://GameScripts/LungeCooldownBar.cs" id="6_lcbar"]
@@ -16,14 +16,17 @@ radius = 2.009975
 script = ExtResource("1_kln2b")
 _player = NodePath("Player")
 
-[node name="Sprite2D" type="Sprite2D" parent="." unique_id=1239749945]
+[node name="CenterBackground" type="Sprite2D" parent="." unique_id=1239749945]
 z_index = -1
+texture_repeat = 2
 position = Vector2(-3, 26)
-texture = ExtResource("3_kln2b")
+texture = ExtResource("2_50glp")
+region_enabled = true
+region_rect = Rect2(-50000, -50000, 100000, 100000)
 
 [node name="Player" parent="." unique_id=1008369897 instance=ExtResource("2_idj7w")]
 
-[node name="DetectionRectangle" parent="Player/EnemyDetection" parent_id_path=PackedInt32Array(1008369897, 1099444505) index="0" unique_id=193483932]
+[node name="DetectionCircle" parent="Player/EnemyDetection" parent_id_path=PackedInt32Array(1008369897, 1099444505) index="0" unique_id=193483932]
 shape = SubResource("CircleShape2D_dewec")
 
 [node name="BoundsSquare" parent="Player/NonPlayerActiveBoundsSquare" parent_id_path=PackedInt32Array(1008369897, 1078959630) index="0" unique_id=1931180464]
